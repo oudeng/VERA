@@ -1,0 +1,1286 @@
+{
+ "built_from": {
+  "t51_expanded": "results/T5_stats/t51_expanded_15seed.json",
+  "sixway": "results/T4_perm_on_sni/t4f_sixway_cells.csv",
+  "fair_same_host": "results/T6_symmetry/fair_same_host_recovery_cells.csv",
+  "t42": "results/T4_leakage/t42_summary.json",
+  "confirmatory": "results/T4_leakage/t42_confirmatory.json",
+  "probe2": "results/T5_probe2/*.json",
+  "scoreboard_desc": "fiveway_summary + faithfulness_summary + perm_on_sni_real_stability + pilot_full_cells + cost/a3 macros (the T4F verdict is carried as retired audit history and is not an input)"
+ },
+ "estimand": {
+  "primary_T": "mean of seed-level medians",
+  "exact_test": "exact enumeration under seed-block sign-exchangeability (all 2^n joint block sign flips)",
+  "ci_T": "seed-only percentile bootstrap, 10,000 resamples, rng seed 20260831; targets/regimes are the fixed reference set -- the inference scope is training randomness",
+  "secondary": "pooled median (robust summary; no test attached)"
+ },
+ "faithfulness": {
+  "MIMIC": {
+   "n_seeds": 15,
+   "T": -0.03,
+   "ci95_T": [
+    -0.053452,
+    -0.007262
+   ],
+   "p_exact": 0.028564453125,
+   "floor": 6.103515625e-05,
+   "seeds_negative": "12/15",
+   "pooled_median_secondary": -0.035714,
+   "p_holm": 0.05712890625,
+   "branch": "N"
+  },
+  "eICU": {
+   "n_seeds": 15,
+   "T": -0.019881,
+   "ci95_T": [
+    -0.045952,
+    0.008214
+   ],
+   "p_exact": 0.19024658203125,
+   "floor": 6.103515625e-05,
+   "seeds_negative": "11/15",
+   "pooled_median_secondary": -0.035714,
+   "p_holm": 0.19024658203125,
+   "branch": "N"
+  }
+ },
+ "faithfulness_rho_medians_15seed": {
+  "MIMIC": {
+   "SNI-D": {
+    "rho_median": 0.2893,
+    "top3_mean": 0.4296
+   },
+   "TAP": {
+    "rho_median": 0.2839,
+    "top3_mean": 0.4889
+   },
+   "n_cells": 180
+  },
+  "eICU": {
+   "SNI-D": {
+    "rho_median": 0.3643,
+    "top3_mean": 0.513
+   },
+   "TAP": {
+    "rho_median": 0.4018,
+    "top3_mean": 0.5333
+   },
+   "n_cells": 180
+  }
+ },
+ "noprior_faithfulness": {
+  "MIMIC": {
+   "n_seeds": 15,
+   "T": -0.360833,
+   "ci95_T": [
+    -0.424524,
+    -0.305711
+   ],
+   "p_exact": 6.103515625e-05,
+   "floor": 6.103515625e-05,
+   "seeds_negative": "15/15",
+   "pooled_median_secondary": -0.355357,
+   "p_holm": 0.0001220703125,
+   "branch": "S"
+  },
+  "eICU": {
+   "n_seeds": 15,
+   "T": -0.37869,
+   "ci95_T": [
+    -0.437024,
+    -0.315238
+   ],
+   "p_exact": 6.103515625e-05,
+   "floor": 6.103515625e-05,
+   "seeds_negative": "15/15",
+   "pooled_median_secondary": -0.403571,
+   "p_holm": 0.0001220703125,
+   "branch": "S"
+  }
+ },
+ "recovery": {
+  "D_vs_TAP": {
+   "n_seeds": 5,
+   "T": -0.027101,
+   "ci95_T": [
+    -0.058642,
+    0.003763
+   ],
+   "p_exact": 0.1875,
+   "floor": 0.0625,
+   "seeds_negative": "4/5",
+   "pooled_median_secondary": -0.020062
+  },
+  "probe_vs_D_same_host_symmetric": {
+   "n_seeds": 5,
+   "T": 0.158627,
+   "ci95_T": [
+    0.131405,
+    0.19321
+   ],
+   "p_exact": 0.0625,
+   "floor": 0.0625,
+   "seeds_negative": "0/5",
+   "pooled_median_secondary": 0.145062
+  },
+  "probe_vs_D_same_host_oracle_control": {
+   "n_seeds": 5,
+   "T": 0.163602,
+   "ci95_T": [
+    0.138838,
+    0.196426
+   ],
+   "p_exact": 0.0625,
+   "floor": 0.0625,
+   "seeds_negative": "0/5",
+   "pooled_median_secondary": 0.145062
+  },
+  "oracle_contribution_T": 0.004975,
+  "probe_vs_D_retrained": {
+   "n_seeds": 5,
+   "T": 0.15422,
+   "ci95_T": [
+    0.129159,
+    0.183446
+   ],
+   "p_exact": 0.0625,
+   "floor": 0.0625,
+   "seeds_negative": "0/5",
+   "pooled_median_secondary": 0.151235,
+   "superseded_by": "probe_vs_D_same_host_symmetric",
+   "superseded_on": "2026-08-29",
+   "superseded_because": "oracle caliber -- the probe's error signal was taken from values withheld from the imputer -- and paired with the T4F-RETRAINED host's D rather than the host the probe itself ran on",
+   "delta_T_symmetric_minus_superseded": 0.004407
+  },
+  "scope": "five synthetic seeds as independent units; three regimes as within-seed blocks; one graph family -- no recovery comparison reaches the 0.0625 two-sided enumeration floor's significance threshold by construction",
+  "consistency_check_D_vs_TAP_p": {
+   "here": 0.1875,
+   "t51": 0.1875
+  },
+  "branch": "N"
+ },
+ "noprior_recovery": {
+  "n_seeds": 5,
+  "T": -0.153669,
+  "ci95_T": [
+   -0.184419,
+   -0.126424
+  ],
+  "p_exact": 0.0625,
+  "floor": 0.0625,
+  "seeds_negative": "5/5",
+  "pooled_median_secondary": -0.161315
+ },
+ "leakage": {
+  "batches": {
+   "original": {
+    "interaction": {
+     "SNI-D": 0,
+     "P": 3,
+     "MissForest-importance": 6,
+     "SHAP-on-MissForest": 6,
+     "Permutation-on-MissForest": 6,
+     "Permutation-on-SNI": 6
+    },
+    "discrepancy_control": {
+     "SNI-D": 6,
+     "P": 6,
+     "MissForest-importance": 4,
+     "SHAP-on-MissForest": 6,
+     "Permutation-on-MissForest": 6,
+     "Permutation-on-SNI": 1
+    },
+    "null_per_object": {
+     "SNI-D": "4/42",
+     "P": "0/42",
+     "MissForest-importance": "2/42",
+     "SHAP-on-MissForest": "0/42",
+     "Permutation-on-MissForest": "2/42",
+     "Permutation-on-SNI": "6/42"
+    },
+    "null_rate_per_object": {
+     "SNI-D": 0.0952,
+     "P": 0.0,
+     "MissForest-importance": 0.0476,
+     "SHAP-on-MissForest": 0.0,
+     "Permutation-on-MissForest": 0.0476,
+     "Permutation-on-SNI": 0.1429
+    }
+   },
+   "confirmatory": {
+    "interaction": {
+     "SNI-D": 0,
+     "P": 2,
+     "MissForest-importance": 6,
+     "SHAP-on-MissForest": 6,
+     "Permutation-on-MissForest": 6,
+     "Permutation-on-SNI": 6
+    },
+    "null_per_object": {
+     "SNI-D": "0/6",
+     "P": "0/6",
+     "MissForest-importance": "0/6",
+     "SHAP-on-MissForest": "1/6",
+     "Permutation-on-MissForest": "0/6",
+     "Permutation-on-SNI": "2/6"
+    }
+   }
+  },
+  "pooled_gen3_secondary": {
+   "SNI-D": "0/9",
+   "P": "3/9",
+   "MissForest-importance": "9/9",
+   "SHAP-on-MissForest": "9/9",
+   "Permutation-on-MissForest": "9/9",
+   "Permutation-on-SNI": "9/9"
+  },
+  "probe_null_by_batch": {
+   "original": {
+    "detected": 6,
+    "n": 42,
+    "p_geq_k_exact_binomial": 0.017432
+   },
+   "confirmatory": {
+    "detected": 2,
+    "n": 6
+   }
+  },
+  "probe_interaction_counts": 6,
+  "mcnemar_confirmatory": {
+   "confirmatory_6": {
+    "n_pairs": 6,
+    "D_only": 0,
+    "TAP_only": 2,
+    "p_two_sided": 0.5
+   },
+   "pooled_gen3_9": {
+    "n_pairs": 9,
+    "D_only": 0,
+    "TAP_only": 3,
+    "p_two_sided": 0.25
+   }
+  },
+  "mcnemar_D_vs_probe_original": {
+   "batch": "original",
+   "pair": "SNI-D vs Permutation-on-SNI",
+   "a_only": 0,
+   "b_only": 6,
+   "n_pairs": 6,
+   "p_two_sided": 0.03125,
+   "holm_two_test_family_floor": 0.0625,
+   "note": "post-hoc exploratory paired contrast: the original committed rules (6535787) fixed per-class reporting and the interaction win-threshold, designating no single primary inferential contrast (rule archaeology, P5R-H SS1.1)"
+  },
+  "calibration": "thresholds calibrated on >=20 random-proxy retrainings per (object, dataset, target row); observed null rates reported per object and batch"
+ },
+ "probe2_sensitivity": {
+  "role": "repeat-draw replication (tau=0.8, all singletons) + group-permutation sensitivity (tau=0.6/0.7); NOT an independent second readout",
+  "families": {
+   "SNI|MIMIC|tau=0.8": {
+    "n_seeds": 15,
+    "m1": {
+     "observed_stat_mean_of_block_medians": -0.036666666666666646,
+     "effect_pooled_median": -0.041071428571428585,
+     "n_blocks": 15,
+     "n_flips": 32768,
+     "p_two_sided": 0.00341796875,
+     "p_one_sided_neg": 0.001708984375,
+     "floor_two_sided": 6.103515625e-05
+    },
+    "m2_ci95": [
+     -0.07142857142857141,
+     0.0017857142857143071
+    ],
+    "aggregates": {
+     "seed_medians": {
+      "1": -0.07499999999999998,
+      "2": -0.06428571428571421,
+      "3": -0.007142857142857173,
+      "5": -0.030357142857142805,
+      "8": -0.07857142857142858,
+      "13": -0.08571428571428569,
+      "21": 0.03571428571428567,
+      "34": -0.04999999999999993,
+      "55": -0.058928571428571414,
+      "89": 0.023214285714285687,
+      "144": -0.016071428571428577,
+      "233": -0.016071428571428487,
+      "377": -0.07500000000000001,
+      "610": -0.03392857142857137,
+      "987": -0.017857142857142835
+     },
+     "n_units": 12,
+     "unit_median_sign_count": {
+      "neg": 7,
+      "pos": 5,
+      "zero": 0
+     }
+    }
+   },
+   "SNI|MIMIC|tau=0.6": {
+    "n_seeds": 15,
+    "m1": {
+     "observed_stat_mean_of_block_medians": -0.017912087912087926,
+     "effect_pooled_median": -0.019230769230769246,
+     "n_blocks": 15,
+     "n_flips": 32768,
+     "p_two_sided": 0.204345703125,
+     "p_one_sided_neg": 0.1021728515625,
+     "floor_two_sided": 6.103515625e-05
+    },
+    "m2_ci95": [
+     -0.06153846153846154,
+     0.035714285714285754
+    ],
+    "aggregates": {
+     "seed_medians": {
+      "1": -0.10714285714285711,
+      "2": -0.09340659340659337,
+      "3": 0.02747252747252743,
+      "5": -0.04945054945054944,
+      "8": -0.08296703296703298,
+      "13": -0.030219780219780223,
+      "21": 0.019780219780219786,
+      "34": -0.02417582417582427,
+      "55": 0.041208791208791194,
+      "89": 0.046703296703296676,
+      "144": -0.030219780219780223,
+      "233": 0.005494505494505534,
+      "377": -0.05769230769230768,
+      "610": 0.027472527472527375,
+      "987": 0.03846153846153838
+     },
+     "n_units": 12,
+     "unit_median_sign_count": {
+      "neg": 7,
+      "pos": 5,
+      "zero": 0
+     }
+    }
+   },
+   "SNI|MIMIC|tau=0.7": {
+    "n_seeds": 15,
+    "m1": {
+     "observed_stat_mean_of_block_medians": -0.006547619047619044,
+     "effect_pooled_median": -0.023489010989010933,
+     "n_blocks": 15,
+     "n_flips": 32768,
+     "p_two_sided": 0.6197509765625,
+     "p_one_sided_neg": 0.30987548828125,
+     "floor_two_sided": 6.103515625e-05
+    },
+    "m2_ci95": [
+     -0.05274725274725278,
+     0.02637362637362638
+    ],
+    "aggregates": {
+     "seed_medians": {
+      "1": -0.0703296703296703,
+      "2": 0.00659340659340657,
+      "3": 0.008791208791208802,
+      "5": -0.0197802197802198,
+      "8": -0.0428571428571428,
+      "13": -0.04835164835164836,
+      "21": 0.05934065934065931,
+      "34": -0.004395604395604463,
+      "55": 0.07472527472527474,
+      "89": 0.054945054945054944,
+      "144": -0.08131868131868132,
+      "233": -0.026373626373626308,
+      "377": -0.03296703296703295,
+      "610": 0.06813186813186814,
+      "987": -0.04436813186813186
+     },
+     "n_units": 12,
+     "unit_median_sign_count": {
+      "neg": 7,
+      "pos": 3,
+      "zero": 2
+     }
+    }
+   },
+   "NoPrior|MIMIC|tau=0.8": {
+    "n_seeds": 15,
+    "m1": {
+     "observed_stat_mean_of_block_medians": -0.3319047619047619,
+     "effect_pooled_median": -0.3125,
+     "n_blocks": 15,
+     "n_flips": 32768,
+     "p_two_sided": 6.103515625e-05,
+     "p_one_sided_neg": 3.0517578125e-05,
+     "floor_two_sided": 6.103515625e-05
+    },
+    "m2_ci95": [
+     -0.44285714285714284,
+     -0.2071428571428571
+    ],
+    "aggregates": {
+     "seed_medians": {
+      "1": -0.4142857142857142,
+      "2": -0.2517857142857143,
+      "3": -0.2,
+      "5": -0.09821428571428573,
+      "8": -0.2999999999999999,
+      "13": -0.3696428571428571,
+      "21": -0.46428571428571425,
+      "34": -0.36249999999999993,
+      "55": -0.20357142857142854,
+      "89": -0.1964285714285714,
+      "144": -0.575,
+      "233": -0.47678571428571426,
+      "377": -0.17857142857142855,
+      "610": -0.3446428571428571,
+      "987": -0.5428571428571427
+     },
+     "n_units": 12,
+     "unit_median_sign_count": {
+      "neg": 11,
+      "pos": 1,
+      "zero": 0
+     }
+    }
+   },
+   "NoPrior|MIMIC|tau=0.6": {
+    "n_seeds": 15,
+    "m1": {
+     "observed_stat_mean_of_block_medians": -0.29754578754578753,
+     "effect_pooled_median": -0.26923076923076916,
+     "n_blocks": 15,
+     "n_flips": 32768,
+     "p_two_sided": 6.103515625e-05,
+     "p_one_sided_neg": 3.0517578125e-05,
+     "floor_two_sided": 6.103515625e-05
+    },
+    "m2_ci95": [
+     -0.4340659340659341,
+     -0.15384615384615385
+    ],
+    "aggregates": {
+     "seed_medians": {
+      "1": -0.2802197802197802,
+      "2": -0.3120879120879121,
+      "3": -0.1895604395604396,
+      "5": -0.026373626373626412,
+      "8": -0.48901098901098894,
+      "13": -0.5164835164835164,
+      "21": -0.2664835164835164,
+      "34": -0.23791208791208793,
+      "55": -0.3653846153846153,
+      "89": -0.013736263736263729,
+      "144": -0.34065934065934067,
+      "233": -0.5978021978021978,
+      "377": -0.23846153846153847,
+      "610": -0.2472527472527472,
+      "987": -0.34175824175824177
+     },
+     "n_units": 12,
+     "unit_median_sign_count": {
+      "neg": 10,
+      "pos": 2,
+      "zero": 0
+     }
+    }
+   },
+   "NoPrior|MIMIC|tau=0.7": {
+    "n_seeds": 15,
+    "m1": {
+     "observed_stat_mean_of_block_medians": -0.29650183150183157,
+     "effect_pooled_median": -0.2593406593406593,
+     "n_blocks": 15,
+     "n_flips": 32768,
+     "p_two_sided": 6.103515625e-05,
+     "p_one_sided_neg": 3.0517578125e-05,
+     "floor_two_sided": 6.103515625e-05
+    },
+    "m2_ci95": [
+     -0.421978021978022,
+     -0.1450549450549451
+    ],
+    "aggregates": {
+     "seed_medians": {
+      "1": -0.4483516483516484,
+      "2": -0.3230769230769231,
+      "3": -0.31868131868131866,
+      "5": -0.10549450549450551,
+      "8": -0.2197802197802198,
+      "13": -0.25054945054945055,
+      "21": -0.42637362637362636,
+      "34": -0.2549450549450549,
+      "55": -0.16923076923076924,
+      "89": -0.18681318681318684,
+      "144": -0.26373626373626374,
+      "233": -0.4197802197802198,
+      "377": -0.22417582417582424,
+      "610": -0.42774725274725267,
+      "987": -0.4087912087912088
+     },
+     "n_units": 12,
+     "unit_median_sign_count": {
+      "neg": 10,
+      "pos": 2,
+      "zero": 0
+     }
+    }
+   },
+   "SNI|eICU|tau=0.8": {
+    "n_seeds": 15,
+    "m1": {
+     "observed_stat_mean_of_block_medians": -0.03833333333333334,
+     "effect_pooled_median": -0.04107142857142861,
+     "n_blocks": 15,
+     "n_flips": 32768,
+     "p_two_sided": 0.01605224609375,
+     "p_one_sided_neg": 0.008026123046875,
+     "floor_two_sided": 6.103515625e-05
+    },
+    "m2_ci95": [
+     -0.08214285714285714,
+     -0.0035714285714286698
+    ],
+    "aggregates": {
+     "seed_medians": {
+      "1": -0.09285714285714286,
+      "2": 0.007142857142857062,
+      "3": -0.04107142857142862,
+      "5": -0.03214285714285713,
+      "8": -0.06428571428571428,
+      "13": -0.08214285714285716,
+      "21": -0.044642857142857206,
+      "34": 0.04285714285714283,
+      "55": -0.0803571428571428,
+      "89": -0.010714285714285704,
+      "144": -0.14107142857142854,
+      "233": 0.06964285714285716,
+      "377": -0.010714285714285704,
+      "610": -0.058928571428571386,
+      "987": -0.035714285714285726
+     },
+     "n_units": 12,
+     "unit_median_sign_count": {
+      "neg": 7,
+      "pos": 4,
+      "zero": 1
+     }
+    }
+   },
+   "SNI|eICU|tau=0.6": {
+    "n_seeds": 15,
+    "m1": {
+     "observed_stat_mean_of_block_medians": -0.04732600732600731,
+     "effect_pooled_median": -0.04615384615384613,
+     "n_blocks": 15,
+     "n_flips": 32768,
+     "p_two_sided": 0.01873779296875,
+     "p_one_sided_neg": 0.009368896484375,
+     "floor_two_sided": 6.103515625e-05
+    },
+    "m2_ci95": [
+     -0.1054945054945055,
+     -0.010989010989011005
+    ],
+    "aggregates": {
+     "seed_medians": {
+      "1": -0.12967032967032968,
+      "2": -0.07499999999999998,
+      "3": -0.15178571428571425,
+      "5": -0.07472527472527471,
+      "8": -0.024175824175824173,
+      "13": -0.004395604395604352,
+      "21": -0.025000000000000078,
+      "34": -0.03296703296703293,
+      "55": -0.08873626373626368,
+      "89": 0.010989010989011012,
+      "144": -0.17802197802197806,
+      "233": 0.08131868131868131,
+      "377": 0.01978021978021985,
+      "610": -0.03598901098901103,
+      "987": -0.0015109890109890195
+     },
+     "n_units": 12,
+     "unit_median_sign_count": {
+      "neg": 6,
+      "pos": 6,
+      "zero": 0
+     }
+    }
+   },
+   "SNI|eICU|tau=0.7": {
+    "n_seeds": 15,
+    "m1": {
+     "observed_stat_mean_of_block_medians": -0.03833333333333334,
+     "effect_pooled_median": -0.04107142857142861,
+     "n_blocks": 15,
+     "n_flips": 32768,
+     "p_two_sided": 0.01605224609375,
+     "p_one_sided_neg": 0.008026123046875,
+     "floor_two_sided": 6.103515625e-05
+    },
+    "m2_ci95": [
+     -0.08214285714285714,
+     -0.0035714285714286698
+    ],
+    "aggregates": {
+     "seed_medians": {
+      "1": -0.09285714285714286,
+      "2": 0.007142857142857062,
+      "3": -0.04107142857142862,
+      "5": -0.03214285714285713,
+      "8": -0.06428571428571428,
+      "13": -0.08214285714285716,
+      "21": -0.044642857142857206,
+      "34": 0.04285714285714283,
+      "55": -0.0803571428571428,
+      "89": -0.010714285714285704,
+      "144": -0.14107142857142854,
+      "233": 0.06964285714285716,
+      "377": -0.010714285714285704,
+      "610": -0.058928571428571386,
+      "987": -0.035714285714285726
+     },
+     "n_units": 12,
+     "unit_median_sign_count": {
+      "neg": 7,
+      "pos": 4,
+      "zero": 1
+     }
+    }
+   },
+   "NoPrior|eICU|tau=0.8": {
+    "n_seeds": 15,
+    "m1": {
+     "observed_stat_mean_of_block_medians": -0.38988095238095233,
+     "effect_pooled_median": -0.39999999999999997,
+     "n_blocks": 15,
+     "n_flips": 32768,
+     "p_two_sided": 6.103515625e-05,
+     "p_one_sided_neg": 3.0517578125e-05,
+     "floor_two_sided": 6.103515625e-05
+    },
+    "m2_ci95": [
+     -0.5107142857142857,
+     -0.3142857142857143
+    ],
+    "aggregates": {
+     "seed_medians": {
+      "1": -0.4446428571428571,
+      "2": -0.2839285714285714,
+      "3": -0.37857142857142856,
+      "5": -0.6678571428571427,
+      "8": -0.43214285714285705,
+      "13": -0.2964285714285714,
+      "21": -0.3321428571428571,
+      "34": -0.444642857142857,
+      "55": -0.3678571428571428,
+      "89": -0.4125,
+      "144": -0.18571428571428558,
+      "233": -0.2017857142857142,
+      "377": -0.3910714285714285,
+      "610": -0.3821428571428571,
+      "987": -0.6267857142857143
+     },
+     "n_units": 12,
+     "unit_median_sign_count": {
+      "neg": 12,
+      "pos": 0,
+      "zero": 0
+     }
+    }
+   },
+   "NoPrior|eICU|tau=0.6": {
+    "n_seeds": 15,
+    "m1": {
+     "observed_stat_mean_of_block_medians": -0.4065567765567765,
+     "effect_pooled_median": -0.3934065934065934,
+     "n_blocks": 15,
+     "n_flips": 32768,
+     "p_two_sided": 6.103515625e-05,
+     "p_one_sided_neg": 3.0517578125e-05,
+     "floor_two_sided": 6.103515625e-05
+    },
+    "m2_ci95": [
+     -0.4571428571428572,
+     -0.34065934065934067
+    ],
+    "aggregates": {
+     "seed_medians": {
+      "1": -0.4967032967032967,
+      "2": -0.37142857142857144,
+      "3": -0.43736263736263736,
+      "5": -0.7214285714285713,
+      "8": -0.2593406593406594,
+      "13": -0.3142857142857143,
+      "21": -0.3244505494505495,
+      "34": -0.33131868131868136,
+      "55": -0.4527472527472527,
+      "89": -0.4483516483516484,
+      "144": -0.378021978021978,
+      "233": -0.2729395604395604,
+      "377": -0.36483516483516487,
+      "610": -0.351510989010989,
+      "987": -0.5736263736263736
+     },
+     "n_units": 12,
+     "unit_median_sign_count": {
+      "neg": 12,
+      "pos": 0,
+      "zero": 0
+     }
+    }
+   },
+   "NoPrior|eICU|tau=0.7": {
+    "n_seeds": 15,
+    "m1": {
+     "observed_stat_mean_of_block_medians": -0.38988095238095233,
+     "effect_pooled_median": -0.39999999999999997,
+     "n_blocks": 15,
+     "n_flips": 32768,
+     "p_two_sided": 6.103515625e-05,
+     "p_one_sided_neg": 3.0517578125e-05,
+     "floor_two_sided": 6.103515625e-05
+    },
+    "m2_ci95": [
+     -0.5107142857142857,
+     -0.3142857142857143
+    ],
+    "aggregates": {
+     "seed_medians": {
+      "1": -0.4446428571428571,
+      "2": -0.2839285714285714,
+      "3": -0.37857142857142856,
+      "5": -0.6678571428571427,
+      "8": -0.43214285714285705,
+      "13": -0.2964285714285714,
+      "21": -0.3321428571428571,
+      "34": -0.444642857142857,
+      "55": -0.3678571428571428,
+      "89": -0.4125,
+      "144": -0.18571428571428558,
+      "233": -0.2017857142857142,
+      "377": -0.3910714285714285,
+      "610": -0.3821428571428571,
+      "987": -0.6267857142857143
+     },
+     "n_units": 12,
+     "unit_median_sign_count": {
+      "neg": 12,
+      "pos": 0,
+      "zero": 0
+     }
+    }
+   }
+  },
+  "qualifiers": {
+   "MIMIC": {
+    "rep_sensitivity_seed1": [
+     {
+      "target": "MAP_mmHg",
+      "rho_D_5rep": 0.2286,
+      "rho_D_10rep": 0.2464,
+      "rho_TAP_5rep": 0.4571,
+      "rho_TAP_10rep": 0.4821
+     },
+     {
+      "target": "lactate_mmol_L",
+      "rho_D_5rep": 0.4214,
+      "rho_D_10rep": 0.5214,
+      "rho_TAP_5rep": 0.3179,
+      "rho_TAP_10rep": 0.4036
+     },
+     {
+      "target": "creatinine_mg_dL",
+      "rho_D_5rep": 0.2286,
+      "rho_D_10rep": 0.2214,
+      "rho_TAP_5rep": 0.0536,
+      "rho_TAP_10rep": 0.0107
+     },
+     {
+      "target": "vasopressor_dose",
+      "rho_D_5rep": 0.525,
+      "rho_D_10rep": 0.3964,
+      "rho_TAP_5rep": 0.6536,
+      "rho_TAP_10rep": 0.5214
+     },
+     {
+      "target": "SBP_min",
+      "rho_D_5rep": 0.3821,
+      "rho_D_10rep": 0.2821,
+      "rho_TAP_5rep": 0.3179,
+      "rho_TAP_10rep": 0.2821
+     },
+     {
+      "target": "DBP_min",
+      "rho_D_5rep": 0.3357,
+      "rho_D_10rep": 0.325,
+      "rho_TAP_5rep": 0.5071,
+      "rho_TAP_10rep": 0.5393
+     },
+     {
+      "target": "HR_max",
+      "rho_D_5rep": -0.1464,
+      "rho_D_10rep": -0.1393,
+      "rho_TAP_5rep": 0.0536,
+      "rho_TAP_10rep": 0.0464
+     },
+     {
+      "target": "RespRate_max",
+      "rho_D_5rep": 0.3536,
+      "rho_D_10rep": 0.2607,
+      "rho_TAP_5rep": 0.375,
+      "rho_TAP_10rep": 0.4286
+     },
+     {
+      "target": "SpO2_min",
+      "rho_D_5rep": -0.4893,
+      "rho_D_10rep": -0.4571,
+      "rho_TAP_5rep": -0.3143,
+      "rho_TAP_10rep": -0.2321
+     },
+     {
+      "target": "hemoglobin_min",
+      "rho_D_5rep": 0.1107,
+      "rho_D_10rep": 0.0536,
+      "rho_TAP_5rep": 0.075,
+      "rho_TAP_10rep": 0.0929
+     },
+     {
+      "target": "sodium_min",
+      "rho_D_5rep": 0.3179,
+      "rho_D_10rep": 0.2929,
+      "rho_TAP_5rep": 0.2214,
+      "rho_TAP_10rep": 0.1857
+     },
+     {
+      "target": "urine_output_min",
+      "rho_D_5rep": -0.5429,
+      "rho_D_10rep": -0.4857,
+      "rho_TAP_5rep": -0.2321,
+      "rho_TAP_10rep": -0.125
+     }
+    ],
+    "delta_median_5rep": -0.075,
+    "delta_median_10rep": -0.1464,
+    "B_level_agreement_seed1_spearman_per_target": [
+     0.9786,
+     0.7357,
+     0.8929,
+     0.8643,
+     0.9464,
+     0.8536,
+     0.9286,
+     0.6857,
+     0.9321,
+     0.9179,
+     0.9643,
+     0.9857
+    ],
+    "rho_level_agreement_all_cells": {
+     "n_cells": 180,
+     "spearman_delta_probe1_vs_probe2": 0.8214,
+     "median_abs_diff": 0.0571
+    }
+   },
+   "eICU": {
+    "rep_sensitivity_seed1": [
+     {
+      "target": "map_mmhg",
+      "rho_D_5rep": 0.6286,
+      "rho_D_10rep": 0.5464,
+      "rho_TAP_5rep": 0.5714,
+      "rho_TAP_10rep": 0.4929
+     },
+     {
+      "target": "lactate_mmol_l",
+      "rho_D_5rep": 0.575,
+      "rho_D_10rep": 0.5893,
+      "rho_TAP_5rep": 0.7714,
+      "rho_TAP_10rep": 0.8321
+     },
+     {
+      "target": "creatinine_mg_dl",
+      "rho_D_5rep": 0.1964,
+      "rho_D_10rep": 0.3179,
+      "rho_TAP_5rep": 0.275,
+      "rho_TAP_10rep": 0.3714
+     },
+     {
+      "target": "vasopressor_dose",
+      "rho_D_5rep": 0.375,
+      "rho_D_10rep": 0.35,
+      "rho_TAP_5rep": 0.2214,
+      "rho_TAP_10rep": 0.2107
+     },
+     {
+      "target": "sbp_min",
+      "rho_D_5rep": 0.5571,
+      "rho_D_10rep": 0.5429,
+      "rho_TAP_5rep": 0.6679,
+      "rho_TAP_10rep": 0.6929
+     },
+     {
+      "target": "dbp_min",
+      "rho_D_5rep": 0.5464,
+      "rho_D_10rep": 0.5036,
+      "rho_TAP_5rep": 0.5857,
+      "rho_TAP_10rep": 0.6393
+     },
+     {
+      "target": "hr_max",
+      "rho_D_5rep": 0.3786,
+      "rho_D_10rep": 0.4107,
+      "rho_TAP_5rep": 0.65,
+      "rho_TAP_10rep": 0.6786
+     },
+     {
+      "target": "resprate_max",
+      "rho_D_5rep": 0.4,
+      "rho_D_10rep": 0.475,
+      "rho_TAP_5rep": 0.2821,
+      "rho_TAP_10rep": 0.3036
+     },
+     {
+      "target": "spo2_min",
+      "rho_D_5rep": 0.3357,
+      "rho_D_10rep": 0.3286,
+      "rho_TAP_5rep": 0.4464,
+      "rho_TAP_10rep": 0.3786
+     },
+     {
+      "target": "hemoglobin_min",
+      "rho_D_5rep": 0.1571,
+      "rho_D_10rep": 0.1929,
+      "rho_TAP_5rep": 0.2643,
+      "rho_TAP_10rep": 0.3036
+     },
+     {
+      "target": "sodium_min",
+      "rho_D_5rep": 0.4893,
+      "rho_D_10rep": 0.4679,
+      "rho_TAP_5rep": 0.375,
+      "rho_TAP_10rep": 0.3679
+     },
+     {
+      "target": "urine_output_min",
+      "rho_D_5rep": -0.0607,
+      "rho_D_10rep": -0.0429,
+      "rho_TAP_5rep": 0.1286,
+      "rho_TAP_10rep": 0.2429
+     }
+    ],
+    "delta_median_5rep": -0.0929,
+    "delta_median_10rep": -0.0821,
+    "B_level_agreement_seed1_spearman_per_target": [
+     0.7714,
+     0.9107,
+     0.7,
+     0.9036,
+     0.9536,
+     0.9857,
+     0.8964,
+     0.8893,
+     0.9286,
+     0.925,
+     0.8357,
+     0.7536
+    ],
+    "rho_level_agreement_all_cells": {
+     "n_cells": 180,
+     "spearman_delta_probe1_vs_probe2": 0.815,
+     "median_abs_diff": 0.0679
+    }
+   }
+  }
+ },
+ "scoreboard_desc": {
+  "stability_rows12_mean": {
+   "SNI-D": {
+    "MIMIC": 0.935,
+    "eICU": 0.8927
+   },
+   "MissForest-importance": {
+    "MIMIC": 0.9885,
+    "eICU": 0.9846
+   },
+   "SHAP-on-MissForest": {
+    "MIMIC": 0.9942,
+    "eICU": 0.9921
+   },
+   "Permutation-on-MissForest": {
+    "MIMIC": 0.9902,
+    "eICU": 0.9835
+   }
+  },
+  "faith_rho_mean": {
+   "MissForest-importance": {
+    "MIMIC": 0.2254,
+    "eICU": 0.3833
+   },
+   "SHAP-on-MissForest": {
+    "MIMIC": 0.2142,
+    "eICU": 0.3971
+   },
+   "Permutation-on-MissForest": {
+    "MIMIC": 0.222,
+    "eICU": 0.3968
+   }
+  },
+  "host_band_mean": {
+   "MIMIC": 0.45402,
+   "eICU": 0.5281899999999999
+  },
+  "host_band_mean_symmetric": {
+   "MIMIC": 0.8195,
+   "eICU": 0.7476
+  },
+  "pilot_auroc": {
+   "MissForest-importance": 0.887771,
+   "Permutation-on-MissForest": 0.911578,
+   "SHAP-on-MissForest": 0.902372,
+   "SNI-D": 0.771264
+  },
+  "cost_display": {
+   "grid_range": "47--64$\\times$",
+   "single_thread_range": "30--32$\\times$"
+  }
+ },
+ "redundancy_sensitivity": {
+  "MIMIC|tau=0.5": {
+   "applicable": true,
+   "R_size": 3,
+   "n_keep": 13,
+   "n_seeds": 15,
+   "m1": {
+    "observed_stat_mean_of_block_medians": -0.03095238095238095,
+    "effect_pooled_median": -0.034965034965034975,
+    "n_blocks": 15,
+    "n_flips": 32768,
+    "p_two_sided": 0.03997802734375,
+    "p_one_sided_neg": 0.019989013671875,
+    "floor_two_sided": 6.103515625e-05
+   },
+   "m2_ci95": [
+    -0.06643356643356649,
+    0.006993006993007034
+   ],
+   "aggregates": {
+    "seed_medians": {
+     "1": -0.10739260739260739,
+     "2": -0.05944055944055948,
+     "3": 0.038461538461538464,
+     "5": -0.03221778221778221,
+     "8": -0.06993006993006991,
+     "13": 0.010489510489510523,
+     "21": -0.06293706293706294,
+     "34": -0.05894105894105896,
+     "55": 0.0069930069930069505,
+     "89": -0.0734265734265734,
+     "144": -0.02447552447552448,
+     "233": -0.04195804195804196,
+     "377": -0.03496503496503496,
+     "610": 0.10139860139860139,
+     "987": -0.05594405594405594
+    },
+    "n_units": 12,
+    "unit_median_sign_count": {
+     "neg": 6,
+     "pos": 4,
+     "zero": 2
+    }
+   },
+   "old_wilcoxon_p_n60_scope": 0.0212098163713155
+  },
+  "MIMIC|tau=0.6": {
+   "applicable": true,
+   "R_size": 3,
+   "n_keep": 13,
+   "n_seeds": 15,
+   "m1": {
+    "observed_stat_mean_of_block_medians": -0.03095238095238095,
+    "effect_pooled_median": -0.034965034965034975,
+    "n_blocks": 15,
+    "n_flips": 32768,
+    "p_two_sided": 0.03997802734375,
+    "p_one_sided_neg": 0.019989013671875,
+    "floor_two_sided": 6.103515625e-05
+   },
+   "m2_ci95": [
+    -0.06643356643356649,
+    0.006993006993007034
+   ],
+   "aggregates": {
+    "seed_medians": {
+     "1": -0.10739260739260739,
+     "2": -0.05944055944055948,
+     "3": 0.038461538461538464,
+     "5": -0.03221778221778221,
+     "8": -0.06993006993006991,
+     "13": 0.010489510489510523,
+     "21": -0.06293706293706294,
+     "34": -0.05894105894105896,
+     "55": 0.0069930069930069505,
+     "89": -0.0734265734265734,
+     "144": -0.02447552447552448,
+     "233": -0.04195804195804196,
+     "377": -0.03496503496503496,
+     "610": 0.10139860139860139,
+     "987": -0.05594405594405594
+    },
+    "n_units": 12,
+    "unit_median_sign_count": {
+     "neg": 6,
+     "pos": 4,
+     "zero": 2
+    }
+   },
+   "old_wilcoxon_p_n60_scope": 0.0212098163713155
+  },
+  "MIMIC|tau=0.7": {
+   "applicable": true,
+   "R_size": 2,
+   "n_keep": 14,
+   "n_seeds": 15,
+   "m1": {
+    "observed_stat_mean_of_block_medians": -0.02179487179487179,
+    "effect_pooled_median": -0.03296703296703299,
+    "n_blocks": 15,
+    "n_flips": 32768,
+    "p_two_sided": 0.1573486328125,
+    "p_one_sided_neg": 0.07867431640625,
+    "floor_two_sided": 6.103515625e-05
+   },
+   "m2_ci95": [
+    -0.06874999999999996,
+    0.019230769230769273
+   ],
+   "aggregates": {
+    "seed_medians": {
+     "1": -0.0824175824175824,
+     "2": -0.03846153846153848,
+     "3": 0.02472527472527475,
+     "5": 0.027472527472527472,
+     "8": -0.0802197802197802,
+     "13": 0.0027472527472527097,
+     "21": -0.03571428571428571,
+     "34": -0.09615384615384615,
+     "55": 0.09395604395604398,
+     "89": 0.013736263736263741,
+     "144": -0.05494505494505496,
+     "233": -0.04670329670329676,
+     "377": -0.019230769230769273,
+     "610": 0.05219780219780222,
+     "987": -0.08791208791208788
+    },
+    "n_units": 12,
+    "unit_median_sign_count": {
+     "neg": 8,
+     "pos": 4,
+     "zero": 0
+    }
+   },
+   "old_wilcoxon_p_n60_scope": 0.0852597561523063
+  },
+  "MIMIC|tau=0.8": {
+   "applicable": false,
+   "R_size": 0,
+   "n_keep": 16
+  },
+  "eICU|tau=0.5": {
+   "applicable": true,
+   "R_size": 3,
+   "n_keep": 13,
+   "n_seeds": 15,
+   "m1": {
+    "observed_stat_mean_of_block_medians": -0.06345321345321346,
+    "effect_pooled_median": -0.06293706293706294,
+    "n_blocks": 15,
+    "n_flips": 32768,
+    "p_two_sided": 0.00537109375,
+    "p_one_sided_neg": 0.002685546875,
+    "floor_two_sided": 6.103515625e-05
+   },
+   "m2_ci95": [
+    -0.11188811188811193,
+    -0.020979020979020935
+   ],
+   "aggregates": {
+    "seed_medians": {
+     "1": -0.04670329670329669,
+     "2": -0.13286713286713284,
+     "3": -0.0734265734265735,
+     "5": -0.02997002997002997,
+     "8": -0.05969030969030969,
+     "13": -0.1223776223776224,
+     "21": -0.09090909090909088,
+     "34": -0.09090909090909095,
+     "55": -0.09790209790209789,
+     "89": 0.12437562437562436,
+     "144": -0.17482517482517482,
+     "233": -0.009990009990009957,
+     "377": -0.11888111888111894,
+     "610": -0.006243756243756338,
+     "987": -0.0214785214785215
+    },
+    "n_units": 12,
+    "unit_median_sign_count": {
+     "neg": 8,
+     "pos": 2,
+     "zero": 2
+    }
+   },
+   "old_wilcoxon_p_n60_scope": 0.0011874452358825
+  },
+  "eICU|tau=0.6": {
+   "applicable": true,
+   "R_size": 2,
+   "n_keep": 14,
+   "n_seeds": 15,
+   "m1": {
+    "observed_stat_mean_of_block_medians": -0.042857142857142844,
+    "effect_pooled_median": -0.0467032967032967,
+    "n_blocks": 15,
+    "n_flips": 32768,
+    "p_two_sided": 0.01397705078125,
+    "p_one_sided_neg": 0.006988525390625,
+    "floor_two_sided": 6.103515625e-05
+   },
+   "m2_ci95": [
+    -0.10219780219780226,
+    -0.012637362637362624
+   ],
+   "aggregates": {
+    "seed_medians": {
+     "1": -0.06593406593406595,
+     "2": -0.0769230769230769,
+     "3": -0.06868131868131871,
+     "5": -0.012637362637362624,
+     "8": -0.014285714285714277,
+     "13": -0.07417582417582419,
+     "21": -0.07967032967032966,
+     "34": -0.08241758241758243,
+     "55": -0.09340659340659332,
+     "89": 0.06593406593406594,
+     "144": -0.1346153846153846,
+     "233": 0.07142857142857144,
+     "377": -0.06043956043956038,
+     "610": 0.010989010989010908,
+     "987": -0.028021978021978033
+    },
+    "n_units": 12,
+    "unit_median_sign_count": {
+     "neg": 8,
+     "pos": 4,
+     "zero": 0
+    }
+   },
+   "old_wilcoxon_p_n60_scope": 0.0053287010481429
+  },
+  "eICU|tau=0.7": {
+   "applicable": false,
+   "R_size": 0,
+   "n_keep": 16
+  },
+  "eICU|tau=0.8": {
+   "applicable": false,
+   "R_size": 0,
+   "n_keep": 16
+  }
+ }
+}

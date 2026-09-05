@@ -1,0 +1,40 @@
+{
+ "built": "2026-09-05 15:39:15",
+ "source_commit": "c9f46b19142477ba42bd25d7de9ecddab049a439",
+ "n_files": 222,
+ "masks_in_manifest": 63,
+ "docs_public": {
+  "docs/adjudications.md": {
+   "dropped_sections": 1,
+   "replaced_refs": 1,
+   "intro": 1
+  },
+  "docs/corrections_ledger.md": {
+   "replaced_paths": 2,
+   "replaced_refs": 1,
+   "intro": 1
+  }
+ },
+ "scans": {
+  "dua": [],
+  "secrets": [],
+  "paths_outside_docs": [
+   "experiments/build_public_repo.py"
+  ],
+  "large": [],
+  "terminology": [],
+  "orthography": [],
+  "terminology_exemptions_absorbed": {
+   "frozen_data_key:decoy": 25,
+   "build_public_repo.py": 1,
+   "manifest_20260828.json": 1,
+   "manifest_20260829.json": 1,
+   "manifest_20260830.json": 1,
+   "cover_letter_body.md": 1,
+   "facts_gate.py": 1,
+   "fill_designer_brief.py": 1,
+   "package_gates.py": 1,
+   "response_letter_body.md": 1
+  }
+ }
+}

@@ -1,0 +1,108 @@
+{
+ "rules": "docs/T61_information_symmetry_rules.md addendum 2026-08-29d SS2",
+ "n_cells": 15,
+ "means": {
+  "MissForest-importance": 0.887771,
+  "P-alone": 0.79712,
+  "Permutation-on-MissForest": 0.911578,
+  "Permutation-on-SNI-fair-noOracle": 0.916556,
+  "Permutation-on-SNI-fair-oracle": 0.922323,
+  "SHAP-on-MissForest": 0.902372,
+  "SNI-D": 0.771264,
+  "SNI-D-fairhost": 0.771264
+ },
+ "probe_vs_D_same_host_no_oracle": {
+  "T_mean_of_seed_medians": 0.15862673442061065,
+  "ci95_T_seedboot": [
+   0.13140508552713515,
+   0.19320987654320987
+  ],
+  "exact_sign_enumeration": {
+   "observed_stat_mean_of_block_medians": 0.15862673442061065,
+   "effect_pooled_median": 0.1450617283950617,
+   "n_blocks": 5,
+   "n_flips": 32,
+   "p_two_sided": 0.0625,
+   "p_one_sided_neg": 1.0,
+   "floor_two_sided": 0.0625
+  },
+  "per_regime_median": {
+   "linear_gaussian": 0.13990825688073394,
+   "nonlinear_mixed": 0.07946336429308576,
+   "interaction_xor": 0.14814814814814825
+  },
+  "cells_favouring_probe": 15,
+  "cells_total": 15
+ },
+ "probe_vs_D_same_host_oracle_control": {
+  "T_mean_of_seed_medians": 0.16360230746006302,
+  "ci95_T_seedboot": [
+   0.13883804322022103,
+   0.19642595679747382
+  ],
+  "exact_sign_enumeration": {
+   "observed_stat_mean_of_block_medians": 0.16360230746006302,
+   "effect_pooled_median": 0.1450617283950617,
+   "n_blocks": 5,
+   "n_flips": 32,
+   "p_two_sided": 0.0625,
+   "p_one_sided_neg": 1.0,
+   "floor_two_sided": 0.0625
+  },
+  "per_regime_median": {
+   "linear_gaussian": 0.14143730886850148,
+   "nonlinear_mixed": 0.08926728586171317,
+   "interaction_xor": 0.14814814814814825
+  },
+  "cells_favouring_probe": 15,
+  "cells_total": 15
+ },
+ "oracle_contribution_T": 0.004976,
+ "archived_superseded": {
+  "source": "results/T5_stats/t_final.json recovery.probe_vs_D_retrained",
+  "T": 0.15422,
+  "ci95_T": [
+   0.129159,
+   0.183446
+  ],
+  "p_exact": 0.0625,
+  "note": "oracle caliber, and paired with the T4F-RETRAINED host's D, not the pilot host's; superseded by the within-host pair above"
+ },
+ "host_reproduction": {
+  "max_abs_D_fair_minus_pilot_D": 0.0,
+  "max_abs_probe_fair_minus_T61_recompute": 0.0,
+  "cells": 15,
+  "relevant_readouts_bitwise_match_archived": true,
+  "scope": "D and the permutation matrix, per cell, on all 15 cells. Model weights, optimizer state and full prediction vectors are NOT compared: the archive holds no model-state digest. This establishes readout-level reproduction for the quantities used here, not bitwise identity of the full trained host."
+ },
+ "frozen_t4f_integrity": {
+  "method": "digest + schema + declared path; the retired rule's arithmetic is NOT re-executed (tenth review P0-1)",
+  "label_lives_in": "evidence/AUDIT_HISTORY.json (HISTORICAL - NOT CANONICAL)",
+  "current_inferential_source": "probe_vs_D_same_host_no_oracle.exact_sign_enumeration (5 seed blocks, two-sided exact p = 0.0625 at its attainable floor; classification INDET)",
+  "files": {
+   "t4f_verdict.json": {
+    "path": "results/T4_perm_on_sni/t4f_verdict.json",
+    "present": true,
+    "sha256": "de6b6aac1612af82331b5d9fa0f6df4601626fd7aab93ba45c94ebdbff96b3ab",
+    "schema_keys_present": [
+     "primary",
+     "verdict"
+    ],
+    "schema_ok": true
+   },
+   "t4f_sixway_cells.csv": {
+    "path": "results/T4_perm_on_sni/t4f_sixway_cells.csv",
+    "present": true,
+    "sha256": "5d8a12f6d6983d338740c63942a784b089ae3b9a25440ed9b1553df3684699f6",
+    "schema_keys_present": [
+     "auroc",
+     "method",
+     "regime",
+     "seed"
+    ],
+    "schema_ok": true
+   }
+  },
+  "intact": true
+ }
+}
