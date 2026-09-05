@@ -1,0 +1,1145 @@
+schema_version: 1
+_comment: |-
+  SINGLE SOURCE OF TRUTH for dataset structure (engineering principle E1).
+  In R0 this file existed but drove nothing: its only consumer was
+  scripts/12_revision_B_tasks.py:66, and its recommended_cat_balance_mode was
+  flattened to 'none' in every manifest (P0 finding B24). In code_SNI the
+  experiment runners read this file and manifests are GENERATED from it.
+
+  'role' values:
+    imputable  - masked and evaluated
+    identifier - never masked, excluded from imputation and evaluation
+  Column 'issues' record P0 findings verbatim. They are ANNOTATIONS ONLY at this
+  stage: P1 does not change any column's role. Resolution is a first-author
+  decision informed by the T1.6 quantification (see docs/corrections_R0.md).
+seeds:
+  train:
+  - 1
+  - 2
+  - 3
+  - 5
+  - 8
+  missingness_generator: 2025
+missingness:
+  mechanisms:
+  - MCAR
+  - MAR
+  - MNAR
+  rates:
+  - 0.1
+  - 0.3
+  - 0.5
+  rate_tag_map:
+    0.1: 10per
+    0.3: 30per
+    0.5: 50per
+datasets:
+  MIMIC:
+    complete_path: data/derived/MIMIC_complete.csv
+    n_rows: 2849
+    n_columns_total: 18
+    n_imputable: 12
+    identifier_column: ID
+    downstream_target: mortality_risk
+    always_observed:
+    - age_years
+    - gender
+    - charlson_index
+    - mechanical_ventilation
+    evaluation_coverage: 0.75
+    provenance_note: REPLACED in R1/P2. The R0 table (2052 x 9, target ALARM) had no build script anywhere
+      on the machine (B36) and its target had 34 classes with 9 singletons and a 792:1 imbalance, so stratified
+      CV was mathematically impossible. Rebuilt by data_layer/build_mimic.py from ~/data_MIMIC_ICU/mimic_icu_mortality_real.csv
+      (2939 x 31), applying T1.6's F1-F10 plus B68/B69.
+    columns:
+      ID:
+        type: integer_index
+        role: identifier
+        dtype: int64
+        cardinality: 2849
+        range:
+        - 1.0
+        - 2849.0
+      MAP_mmHg:
+        type: continuous
+        role: imputable
+        dtype: int64
+        cardinality: 72
+        range:
+        - 30.0
+        - 107.0
+      lactate_mmol_L:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 137
+        range:
+        - 0.4
+        - 22.0
+      creatinine_mg_dL:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 100
+        range:
+        - 0.1
+        - 20.0
+      age_years:
+        type: continuous
+        role: imputable
+        dtype: int64
+        cardinality: 73
+        range:
+        - 18.0
+        - 91.0
+      charlson_index:
+        type: continuous
+        role: imputable
+        dtype: int64
+        cardinality: 38
+        range:
+        - 0.0
+        - 37.0
+      vasopressor_dose:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 965
+        range:
+        - 0.0
+        - 10.0
+      mechanical_ventilation:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      mortality_risk:
+        type: categorical
+        role: downstream_target
+        dtype: int64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      gender:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      SBP_min:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 93
+        range:
+        - 50.0
+        - 164.0
+      DBP_min:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 70
+        range:
+        - 20.0
+        - 94.0
+      HR_max:
+        type: continuous
+        role: imputable
+        dtype: int64
+        cardinality: 126
+        range:
+        - 53.0
+        - 250.0
+      RespRate_max:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 47
+        range:
+        - 14.0
+        - 60.0
+      SpO2_min:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 47
+        range:
+        - 50.0
+        - 100.0
+      hemoglobin_min:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 125
+        range:
+        - 3.1
+        - 20.0
+      sodium_min:
+        type: continuous
+        role: imputable
+        dtype: int64
+        cardinality: 50
+        range:
+        - 102.0
+        - 166.0
+      urine_output_min:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 112
+        range:
+        - 1.0
+        - 1400.0
+    build_report: data/derived/mimic_build_report.json
+  eICU:
+    complete_path: data/derived/eICU_complete.csv
+    n_rows: 1430
+    n_columns_total: 18
+    n_imputable: 12
+    identifier_column: ID
+    downstream_target: composite_risk_score
+    always_observed:
+    - age_years
+    - gender_std
+    - gcs
+    - mechanical_ventilation_std
+    evaluation_coverage: 0.75
+    provenance_note: 'Rebuilt by data_layer/build_eicu_cdc.py: dropped two zero-variance columns (B35)
+      and the deterministic age_band (B41); reclassified composite_risk_score from feature to downstream
+      target (B34). urine_output_min is NOT winsorized in the table -- Q1-19 requires raw, clipped and
+      log conventions all to be reported, so the 1400 mL/h cap travels in this config for the evaluation
+      layer to apply (B59).'
+    columns:
+      ID:
+        type: integer_index
+        role: identifier
+        dtype: int64
+        cardinality: 1430
+        range:
+        - 1.0
+        - 1430.0
+      map_mmhg:
+        type: continuous
+        role: imputable
+        dtype: int64
+        cardinality: 57
+        range:
+        - 30.0
+        - 152.0
+      lactate_mmol_l:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 230
+        range:
+        - 0.3
+        - 27.18
+      creatinine_mg_dl:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 416
+        range:
+        - 0.2
+        - 15.6
+      age_years:
+        type: continuous
+        role: imputable
+        dtype: int64
+        cardinality: 71
+        range:
+        - 18.0
+        - 89.0
+      gcs:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 13
+        range:
+        - 3.0
+        - 15.0
+      vasopressor_dose:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 86
+        range:
+        - 0.008
+        - 10.0
+      sbp_min:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 77
+        range:
+        - 50.0
+        - 164.0
+      dbp_min:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 54
+        range:
+        - 20.0
+        - 150.0
+      hr_max:
+        type: continuous
+        role: imputable
+        dtype: int64
+        cardinality: 122
+        range:
+        - 51.0
+        - 230.0
+      resprate_max:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 48
+        range:
+        - 9.0
+        - 60.0
+      spo2_min:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 51
+        range:
+        - 50.0
+        - 100.0
+      hemoglobin_min:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 138
+        range:
+        - 0.9
+        - 19.0
+      sodium_min:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 44
+        range:
+        - 111.0
+        - 176.0
+      urine_output_min:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 1164
+        range:
+        - 0.0
+        - 220912.0
+      mechanical_ventilation_std:
+        type: categorical
+        role: imputable
+        dtype: float64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      gender_std:
+        type: categorical
+        role: imputable
+        dtype: float64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      composite_risk_score:
+        type: continuous
+        role: downstream_target
+        dtype: int64
+        cardinality: 14
+        range:
+        - 2.0
+        - 15.0
+    build_report: data/derived/eicu_build_report.json
+  NHANES:
+    complete_path: data/derived/NHANES_complete.csv
+    n_rows: 2242
+    n_columns_total: 17
+    n_imputable: 12
+    identifier_column: ID
+    downstream_target: metabolic_score
+    always_observed:
+    - age
+    - gender_std
+    - smoking_std
+    evaluation_coverage: 0.8
+    provenance_note: 'Rebuilt by data_layer/build_nhanes.py after downloading the four XPT modules the
+      original script asked for but never had (BPQ_J/DIQ_J/SMQ_J/FASTQX_J), which it degraded silently
+      without (B61). Gating variables are derived skip-aware: applying the original skip-blind logic to
+      the completed modules would have cut n from 2274 to 184. B63''s lost .fillna(0) is restored. metabolic_score
+      is the downstream target and is not a feature.'
+    columns:
+      ID:
+        type: integer_index
+        role: identifier
+        dtype: int64
+        cardinality: 2242
+        range:
+        - 1.0
+        - 2242.0
+      waist_circumference:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 669
+        range:
+        - 63.2
+        - 169.5
+      systolic_bp:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 205
+        range:
+        - 74.0
+        - 221.33333333333331
+      diastolic_bp:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 137
+        range:
+        - 35.0
+        - 124.66666666666669
+      triglycerides:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 307
+        range:
+        - 10.0
+        - 2684.0
+      hdl_cholesterol:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 94
+        range:
+        - 11.0
+        - 178.0
+      fasting_glucose:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 189
+        range:
+        - 47.0
+        - 451.0
+      age:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 63
+        range:
+        - 18.0
+        - 80.0
+      bmi:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 329
+        range:
+        - 15.5
+        - 65.3
+      hba1c:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 83
+        range:
+        - 4.1
+        - 15.2
+      gender_std:
+        type: categorical
+        role: imputable
+        dtype: float64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      bp_med_std:
+        type: categorical
+        role: imputable
+        dtype: float64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      lipid_med_std:
+        type: categorical
+        role: imputable
+        dtype: float64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      glucose_med_std:
+        type: categorical
+        role: imputable
+        dtype: float64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      smoking_std:
+        type: categorical
+        role: imputable
+        dtype: float64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      fasting_state_std:
+        type: categorical
+        role: imputable
+        dtype: float64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      metabolic_score:
+        type: continuous
+        role: downstream_target
+        dtype: float64
+        cardinality: 6
+        range:
+        - 0.0
+        - 5.0
+    build_report: data/derived/nhanes_build_report.json
+  CDC2022:
+    complete_path: data/derived/CDC2022_complete.csv
+    n_rows: 3000
+    n_columns_total: 41
+    n_imputable: 37
+    identifier_column: ID
+    downstream_target: HadHeartAttack
+    always_observed:
+    - Sex
+    - AgeCategory
+    evaluation_coverage: 0.9487
+    provenance_note: NEW in R1, answering R2-4 (real tables are wider than 8-16 columns). Stratified n=3000
+      draw from the CDC 2022 BRFSS heart disease table (246,022 x 40 after de-duplication), public domain,
+      no data use agreement. Its companion heart_2022_with_nans.csv carries a REAL missingness pattern
+      and is the project's only real-versus-simulated control.
+    columns:
+      ID:
+        type: integer_index
+        role: identifier
+        dtype: int64
+        cardinality: 3000
+        range:
+        - 1.0
+        - 3000.0
+      State:
+        type: continuous
+        role: imputable
+        dtype: int64
+        cardinality: 54
+        range:
+        - 0.0
+        - 53.0
+      Sex:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      GeneralHealth:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 5
+        range:
+        - 0.0
+        - 4.0
+      PhysicalHealthDays:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 29
+        range:
+        - 0.0
+        - 30.0
+      MentalHealthDays:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 27
+        range:
+        - 0.0
+        - 30.0
+      LastCheckupTime:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 4
+        range:
+        - 0.0
+        - 3.0
+      PhysicalActivities:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      SleepHours:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 18
+        range:
+        - 1.0
+        - 23.0
+      RemovedTeeth:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 4
+        range:
+        - 0.0
+        - 3.0
+      HadHeartAttack:
+        type: categorical
+        role: downstream_target
+        dtype: int64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      HadAngina:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      HadStroke:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      HadAsthma:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      HadSkinCancer:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      HadCOPD:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      HadDepressiveDisorder:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      HadKidneyDisease:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      HadArthritis:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      HadDiabetes:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 4
+        range:
+        - 0.0
+        - 3.0
+      DeafOrHardOfHearing:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      BlindOrVisionDifficulty:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      DifficultyConcentrating:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      DifficultyWalking:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      DifficultyDressingBathing:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      DifficultyErrands:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      SmokerStatus:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 4
+        range:
+        - 0.0
+        - 3.0
+      ECigaretteUsage:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 4
+        range:
+        - 0.0
+        - 3.0
+      ChestScan:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      RaceEthnicityCategory:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 5
+        range:
+        - 0.0
+        - 4.0
+      AgeCategory:
+        type: continuous
+        role: imputable
+        dtype: int64
+        cardinality: 13
+        range:
+        - 0.0
+        - 12.0
+      HeightInMeters:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 41
+        range:
+        - 1.19
+        - 2.13
+      WeightInKilograms:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 224
+        range:
+        - 36.74
+        - 227.7
+      BMI:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 934
+        range:
+        - 12.69
+        - 76.33
+      AlcoholDrinkers:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      HIVTesting:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      FluVaxLast12:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      PneumoVaxEver:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      TetanusLast10Tdap:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 4
+        range:
+        - 0.0
+        - 3.0
+      HighRiskLastYear:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 2
+        range:
+        - 0.0
+        - 1.0
+      CovidPos:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 3
+        range:
+        - 0.0
+        - 2.0
+    build_report: data/derived/cdc_build_report.json
+  AutoMPG:
+    complete_path: data/derived/AutoMPG_complete.csv
+    n_rows: 392
+    n_columns_total: 9
+    n_imputable: 5
+    identifier_column: ID
+    downstream_target: mpg
+    always_observed:
+    - model_year
+    - origin
+    evaluation_coverage: 0.7143
+    provenance_note: 'Unchanged from R0. NOTE (B51): the table is sorted by model_year, which is also
+      its MAR driver, so masks built on it correlate with the row index by construction. Item 2 of the
+      T2.2(c) diagnostic attributes that to the table rather than to the mechanism.'
+    columns:
+      ID:
+        type: integer_index
+        role: identifier
+        dtype: int64
+        cardinality: 392
+        range:
+        - 1.0
+        - 392.0
+      cylinders:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 5
+        range:
+        - 3.0
+        - 8.0
+      displacement:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 81
+        range:
+        - 68.0
+        - 455.0
+      horsepower:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 93
+        range:
+        - 46.0
+        - 230.0
+      weight:
+        type: continuous
+        role: imputable
+        dtype: int64
+        cardinality: 346
+        range:
+        - 1613.0
+        - 5140.0
+      acceleration:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 95
+        range:
+        - 8.0
+        - 24.8
+      model_year:
+        type: continuous
+        role: imputable
+        dtype: int64
+        cardinality: 13
+        range:
+        - 70.0
+        - 82.0
+      origin:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 3
+        range:
+        - 1.0
+        - 3.0
+      mpg:
+        type: continuous
+        role: downstream_target
+        dtype: float64
+        cardinality: 127
+        range:
+        - 9.0
+        - 46.6
+  ComCri:
+    complete_path: data/derived/ComCri_complete.csv
+    n_rows: 1994
+    n_columns_total: 11
+    n_imputable: 6
+    identifier_column: ID
+    downstream_target: ViolentCrimesPerPop
+    always_observed:
+    - medIncome
+    - RegionCode
+    - UrbanType
+    evaluation_coverage: 0.6667
+    provenance_note: Unchanged from R0.
+    columns:
+      ID:
+        type: integer_index
+        role: identifier
+        dtype: int64
+        cardinality: 1994
+        range:
+        - 1.0
+        - 1994.0
+      IncomeLevel:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 4
+        range:
+        - 1.0
+        - 4.0
+      UrbanType:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 3
+        range:
+        - 1.0
+        - 3.0
+      EducationLevel:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 3
+        range:
+        - 1.0
+        - 3.0
+      CrimeLevel:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 4
+        range:
+        - 1.0
+        - 4.0
+      RegionCode:
+        type: categorical
+        role: imputable
+        dtype: int64
+        cardinality: 6
+        range:
+        - 1.0
+        - 6.0
+      medIncome:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 99
+        range:
+        - 0.0
+        - 1.0
+      PctUnemployed:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 98
+        range:
+        - 0.0
+        - 1.0
+      PctFam2Par:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 101
+        range:
+        - 0.0
+        - 1.0
+      PctPopUnderPov:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 100
+        range:
+        - 0.0
+        - 1.0
+      ViolentCrimesPerPop:
+        type: continuous
+        role: downstream_target
+        dtype: float64
+        cardinality: 98
+        range:
+        - 0.0
+        - 1.0
+  Concrete:
+    complete_path: data/derived/Concrete_complete.csv
+    n_rows: 1030
+    n_columns_total: 10
+    n_imputable: 7
+    identifier_column: ID
+    downstream_target: ConcreteCS
+    always_observed:
+    - Duration
+    evaluation_coverage: 0.875
+    provenance_note: Unchanged from R0 except that Duration is reclassified from categorical to continuous
+      (P2 T2.1). Concrete consequently has no categorical column at all.
+    columns:
+      ID:
+        type: integer_index
+        role: identifier
+        dtype: int64
+        cardinality: 1030
+        range:
+        - 1.0
+        - 1030.0
+      Cement:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 278
+        range:
+        - 102.0
+        - 540.0
+      BlastFurnaceSlag:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 185
+        range:
+        - 0.0
+        - 359.4
+      FlyAsh:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 156
+        range:
+        - 0.0
+        - 200.1
+      Water:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 195
+        range:
+        - 121.8
+        - 247.0
+      Superplasticizer:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 111
+        range:
+        - 0.0
+        - 32.2
+      CoarseAggregate:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 284
+        range:
+        - 801.0
+        - 1145.0
+      FineAggregate:
+        type: continuous
+        role: imputable
+        dtype: float64
+        cardinality: 302
+        range:
+        - 594.0
+        - 992.6
+      Duration:
+        type: continuous
+        role: imputable
+        dtype: int64
+        cardinality: 14
+        range:
+        - 1.0
+        - 365.0
+      ConcreteCS:
+        type: continuous
+        role: downstream_target
+        dtype: float64
+        cardinality: 845
+        range:
+        - 2.33
+        - 82.6

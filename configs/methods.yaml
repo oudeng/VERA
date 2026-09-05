@@ -1,0 +1,180 @@
+schema_version: 1
+
+_comment: |
+  SINGLE SOURCE OF TRUTH for method hyperparameters (engineering principle E1).
+
+  The ESM hyperparameter table is GENERATED from this file (code_SNI/reporting),
+  so the manuscript can no longer drift away from what was executed.
+
+  Why this matters — P0 finding B1
+  --------------------------------
+  ESM_1_SNI_HISC_v5_5.tex:242-243 describes the SNI configuration as
+
+      "we cap the outer refinement loop at G=3 iterations and use a pseudo-mask
+       rate rho=0.2. CPFA uses multi-head attention with H=4 heads and a hidden
+       dimension of 64, optimized with AdamW (learning rate 1e-3)"
+
+  Every value except G=3 contradicts the manifests that actually produced the
+  published numbers (data/manifest_sni_v03_main.csv, all 60 rows identical):
+
+      published H=4          -> actual num_heads=16
+      published hidden=64    -> actual hidden_dims=[256,128,64], emb_dim=128
+      published lr=1e-3      -> actual lr=2e-4
+      published rho=0.2      -> actual mask_fraction=0.15
+
+  Corroboration: every lambda_per_head.csv in results_all has 16 head columns and
+  major3_lambda_summary.csv records n_heads=16 in all 670 rows, so H=16 is not a
+  manifest typo.
+
+  The values below are the ACTUAL ones, extracted from the R0 manifests and from
+  the budget_params recorded in each run's metrics_summary.json. P1 does not
+  change any of them — this file reproduces R0 exactly so that the equivalence
+  check in T1.3 is meaningful. Whether to keep these values or adopt the ones the
+  ESM describes is a first-author decision (see docs/corrections_R0.md, B1).
+
+# ---------------------------------------------------------------------------
+# Proposed method
+# ---------------------------------------------------------------------------
+sni:
+  variant: SNI                    # SNI | NoPrior | HardPrior | SNI-M
+  # EM outer loop
+  alpha0: 1.0                     # prior strength at g=1
+  gamma: 0.9                      # decay: alpha^(g) = alpha0 * gamma^(g-1)
+  max_iters: 3                    # G
+  tol: 1.0e-4                     # epsilon; see note below
+  use_stat_refine: true
+  mask_fraction: 0.15             # pseudo-mask rate (ESM calls this rho and says 0.2)
+  # CPFA architecture
+  emb_dim: 128
+  num_heads: 16                   # ESM says H=4
+  hidden_dims: [256, 128, 64]     # ESM says "hidden dimension of 64"
+  # Optimization
+  lr: 2.0e-4                      # ESM says 1e-3
+  epochs: 200
+  batch_size: 128
+  weight_decay: 1.0e-4            # AdamW; applies to theta_lambda too (see B-note)
+  # Categorical handling (v0.3)
+  cat_balance_mode: none          # none | inverse_freq | sqrt_inverse_freq
+  cat_lr_mult: 1.0
+  # Prior strength parameterization
+  lambda_mode: learned            # learned | fixed
+  lambda_fixed_value: 1.0         # used only when lambda_mode=fixed
+  hard_prior_lambda: 10.0         # used only when variant=HardPrior
+
+  _notes:
+    convergence: |
+      P0 finding B4. All 410 R0 SNI runs terminated with warning="did_not_converge"
+      and convergence_iterations=3, i.e. the tol=1e-4 early stop never fired once.
+      Root cause: imputer.py:350 calls _max_imputed_delta without cat_vars, so the
+      categorical branch at :676-679 is dead code. P1 ports this behavior AS IS and
+      only measures, in a read-only side computation, whether the criterion would
+      fire if cat_vars were passed. Changing it is a P3 decision.
+    lambda_operating_point: |
+      P0 finding for R2-5. theta_lambda is initialized to zeros (cpfa.py:199) so
+      lambda starts at softplus(0)=0.693147. The prior loss gradient
+      dL/dlambda_h = alpha*||a_h - P_f||^2 is non-negative, so lambda can only
+      decrease, and AdamW weight_decay pulls theta_lambda back toward 0. The
+      observed range across all 670 recorded values is 0.6126-0.6928, whose upper
+      bound is exactly the initial value. Do not change this parameterization in
+      P1; it is a P3 decision tied to the R2-5 response strategy.
+    ablation_grid: |
+      lambda_mode=fixed was swept over {0.1, 0.5, 1.0, 2.0, 5.0} on MIMIC and
+      NHANES under MAR 30% (50 runs). The "Learned" row of ESM Table S2 is not a
+      separate run: 02_aggregate_ablation.py:214-226 borrows it from
+      results_all/sni_v03_main.
+
+# ---------------------------------------------------------------------------
+# Baselines. Values are those recorded in each run's budget_params, falling back
+# to the dataclass defaults in R0 baselines/registry.py where budget_params was
+# empty (TabCSDI, MeanMode).
+# ---------------------------------------------------------------------------
+baselines:
+
+  MeanMode:
+    _reference: null
+    _params_source: dataclass defaults (registry.py:54-67); budget_params was empty
+    # no hyperparameters
+
+  KNN:
+    k: 5
+    _reference: Gower-distance KNN
+    _params_source: budget_params, k = 5
+    _note: R0 registry did not pass a seed to this method (registry.py:393-395); it is deterministic.
+
+  MICE:
+    max_iter: 5
+    use_probabilistic_sampling: true
+    add_noise_to_continuous: false
+    noise_level: 0.1
+    _reference: Van Buuren; with predictive mean matching
+    _params_source: budget_params
+
+  MissForest:
+    max_iter: 10
+    n_estimators: 100
+    n_jobs: 1
+    verbose: false
+    _reference: Stekhoven & Buhlmann (2012)
+    _params_source: budget_params
+    _note: own implementation (baselines/MissForest_v2.py); missingpy is not installed and not required.
+
+  GAIN:
+    iterations: 10000
+    batch_size: 128
+    hint_rate: 0.9
+    alpha: 100.0
+    learning_rate: 1.0e-3
+    hidden_dim: 256
+    use_gpu: false
+    _reference: Yoon et al. (2018), ICML - official hyperparameters
+    _params_source: budget_params + registry.py:158-197
+
+  MIWAE:
+    batch_size: 64
+    epochs: 500
+    lr: 1.0e-3
+    latent_dim: 10
+    num_iw_samples: 20
+    use_gpu: false
+    _reference: Mattei & Frellsen (2019), ICML
+    _params_source: budget_params
+
+  HyperImpute:
+    timeout: 1800
+    optimizer: hyperband
+    use_gpu: false
+    _reference: Jarrett et al. (2022), ICML; pip package hyperimpute==0.1.17
+    _params_source: budget_params, timeout = 1800 s; optimizer from registry.py default
+    _note: |
+      Runtime variance is extreme - runtime_std 182.3 s against a mean of 233.4 s on
+      AutoMPG (CV about 0.78). ESM Table S6 reports only the mean, discarding this.
+
+  TabCSDI:
+    diffusion_steps: 50
+    n_samples: 10
+    d_model: 128
+    n_heads: 4
+    n_layers: 3
+    epochs: 200
+    batch_size: 64
+    lr: 1.0e-3
+    use_gpu: true
+    _reference: Tashiro et al. (2021) CSDI; Zheng & Charoenphakdee (2022) TabCSDI
+    _params_source: dataclass defaults (registry.py); budget_params was empty
+    _note: |
+      P0 finding B2. All 60 R0 TabCSDI runs recorded use_gpu=True, while ESM
+      Table S6 states "All experiments ran on CPU (Intel Xeon, 32 GB RAM)". SNI
+      also ran on GPU (every SNI manifest has use_gpu=True). The R0 hardware was in
+      fact 1x NVIDIA RTX A6000 + Intel i9-13900K + 123 GiB RAM, as recorded in
+      results_all/environment_snapshot.txt.
+
+# ---------------------------------------------------------------------------
+# Device policy lives in ONE place: configs/scheduling.yaml `method_placement`
+# (ruling A-2: SNI runs on CPU). This file used to carry a `device:` block
+# recording R0's de-facto assignment; P3-A ruling 1 removed it -- a historical
+# record inside a config file is exactly how a B1 (declared != implemented)
+# gets manufactured, and the ESM generator reads this file. The R0 record now
+# lives in docs/corrections_R0.md under B2. tests/test_adjudications.py
+# asserts this file carries no device key and that the ESM runtime table's
+# device column comes from scheduling.yaml.
+# ---------------------------------------------------------------------------

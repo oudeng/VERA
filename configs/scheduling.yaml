@@ -1,0 +1,147 @@
+schema_version: 1
+
+_comment: |
+  T2.0(c): concurrency policy for the P2 full grid.
+
+  This exists because R0 lost 300 runs to it. Every run in results_all/
+  baselines_deep/ failed with "CUDA-capable device(s) is/are busy or
+  unavailable", and the failures were silent -- 01_aggregate_main.py:27-28 simply
+  excluded the directory. P1 then reproduced the same phenomenon while measuring
+  it (P1 section 3.5):
+
+    1 SNI process,  32 threads          269 s per MIMIC run
+    2 SNI processes, 8 threads each   > 6 h, no completion
+   10 SNI processes, 1 thread each    > 70 min each
+
+  Thirty cores sat idle in the failing cases, so the bottleneck is the single
+  GPU, not the CPU. Two processes issuing small kernels to one A6000 serialise
+  against each other badly.
+
+  Measured again during P2's gates, this time for the mixed case, over all ten
+  TabCSDI runs of gate (b). Each ran on the GPU while gate (a)'s SNI job occupied
+  24 CPU threads; R0's figures are for the same runs with the machine to
+  themselves:
+
+    run          ours (s)   R0 (s)   delta
+    MIMIC  s1     509.69    510.33   -0.13 %
+    MIMIC  s2     426.51    427.51   -0.23 %
+    MIMIC  s3     369.35    370.12   -0.21 %
+    MIMIC  s5     376.21    376.79   -0.15 %
+    MIMIC  s8     379.80    380.17   -0.10 %
+    NHANES s1     213.89    211.94   +0.92 %
+    NHANES s2     195.93    194.53   +0.72 %
+    NHANES s3     142.08    141.40   +0.48 %
+    NHANES s5     144.41    143.59   +0.57 %
+    NHANES s8     133.70    132.94   +0.57 %
+
+  So one GPU job alongside one 24-thread CPU job costs at most about 1 %, against
+  the 1300-1500 % of two concurrent GPU jobs. The policy below follows directly.
+
+  Hence the rule: at most one GPU job at a time; CPU jobs fill the remaining
+  cores; total workers capped so the machine is not oversubscribed.
+
+machine:
+  cores: 32
+  gpus: 1
+  gpu_model: NVIDIA RTX A6000
+  gpu_memory_mib: 49140
+
+policy:
+  max_total_workers: 4
+  gpu_queue:
+    max_concurrent: 1
+    _reason: |
+      Serial is not a compromise here, it is strictly faster in wall-clock terms
+      as well as safer. The original note said "13-15x"; T2c.1 measured worse.
+      At concurrency 2, two jobs that each take 107.9 s alone had **neither**
+      finished after 1079 s -- >10x per job, and the same for TabCSDI (38.1 s
+      solo, 0 of 2 done in 380.6 s). A 6 h 21 m accidental overlap put SNI on
+      AutoMPG at 21 969.2 s against 107.9 s solo: **172x**.
+
+      The mechanism is the opposite of what was previously assumed here. Host
+      CPU is not the constraint -- load average was 2.06 on 32 cores throughout.
+      SNI is millions of microsecond-long kernels (0 % GPU utilisation on 60 of
+      60 samples at 584 MiB), and without MPS two CUDA contexts time-slice, so
+      each switch costs far more than the kernel it serves. **Low utilisation is
+      why concurrency is catastrophic, not why it would be safe** (finding B81).
+      Evidence: results/T2c_concurrency/gpu_sweep.csv, column n_completed.
+  cpu_queue:
+    max_concurrent: 12
+    threads_per_worker: 8
+    _reason: |
+      Raised from 3 on the T2c.1 measurement (results/T2c_concurrency/
+      cpu_sweep.csv). Throughput per cell, KNN x eICU: 101.8 s at 3 workers,
+      52.3 at 6, 39.1 at 12, 31.4 at 16.
+
+      **12, not 16, and the limit comes from HyperImpute rather than KNN.**
+      KNN keeps improving to 16 (3.24x over 3 workers) because it is a pure
+      Python double loop with no internal threading. HyperImpute plateaus at 12
+      (51.4 -> 41.8 -> 41.0 s per cell) and at 16 **completed 0 of 16** within
+      10x its own single-job cost. Sizing on KNN alone would have picked 16 and
+      broken the other method.
+
+      PROVISIONAL pending T2d.1: if SNI moves onto this queue its worker count
+      must be re-measured, because SNI on CPU is multi-threaded (measured ~400 %
+      CPU for one process) whereas KNN is single-core. 12 workers of a
+      multi-threaded method is not the same machine load as 12 of a
+      single-threaded one.
+
+#: Which queue each method belongs to. GPU assignment follows what R0 actually
+#: did, not what the paper says (ESM Table S6 claims everything ran on CPU while
+#: SNI and TabCSDI both used the GPU -- finding B2).
+method_placement:
+  # SNI: cpu since P2e section 3.1. Reasons in the ruling's own order: it makes
+  # the ESM hardware statement true rather than a correction (B2/B83 -- on CUDA
+  # the published MIMIC R2 sign cannot be reproduced on CPU and vice versa); it is
+  # FASTER per cell (0.77-0.95x of CUDA across six tables); it is more
+  # deterministic (no TF32, no cuDNN algorithm choice); and it makes SNI's numbers
+  # slightly worse on MIMIC (+0.089 -> -0.038), so the device was not chosen for
+  # the numbers.
+  #
+  # This key still said `gpu` for hours after the ruling was accepted and a CPU
+  # schedule was published from it. Nothing raised: run_grid.py and
+  # recompute_schedule.py both read it, so the grid would have run on CUDA while
+  # the report said CPU. B1's class of defect -- declared value not equal to
+  # implemented value -- committed by us, on our own ruling.
+  SNI:         cpu
+  TabCSDI:     gpu
+  GAIN:        cpu      # use_gpu defaulted to False in R0 and stays there
+  MIWAE:       cpu
+  MeanMode:    cpu
+  KNN:         cpu
+  MICE:        cpu
+  MissForest:  cpu
+  HyperImpute: cpu
+
+determinism:
+  pythonhashseed: 2025
+  _reason: |
+    Must be exported before the interpreter starts. Setting it from inside the
+    process, as R0 did at utils.py:31, has no effect on the running interpreter
+    -- that is finding B48, and it is why no R0 SNI or MICE result is
+    reproducible from its recorded seed.
+  mode: deterministic
+  cublas_workspace_config: ":4096:8"
+
+runtime_estimates_sec:
+  _source: |
+    R0's recorded per-run wall-clock (outputs_paper/csv/major7_runtime.csv),
+    used for scheduling only. CDC2022 is extrapolated from the others by n and d
+    and is the least certain figure here.
+  SNI:         {AutoMPG: 61, Concrete: 70, eICU: 558, ComCri: 456, MIMIC: 340, NHANES: 319, CDC2022: 900}
+  KNN:         {AutoMPG: 22, Concrete: 64, eICU: 1222, ComCri: 831, MIMIC: 603, NHANES: 1294, CDC2022: 2200}
+  HyperImpute: {AutoMPG: 233, Concrete: 140, eICU: 279, ComCri: 290, MIMIC: 110, NHANES: 408, CDC2022: 700}
+  TabCSDI:     {AutoMPG: 34, Concrete: 37, eICU: 241, ComCri: 215, MIMIC: 413, NHANES: 165, CDC2022: 600}
+  MIWAE:       {AutoMPG: 56, Concrete: 110, eICU: 144, ComCri: 166, MIMIC: 293, NHANES: 175, CDC2022: 400}
+  GAIN:        {AutoMPG: 33, Concrete: 32, eICU: 37, ComCri: 34, MIMIC: 38, NHANES: 33, CDC2022: 60}
+  MissForest:  {AutoMPG: 4, Concrete: 6, eICU: 22, ComCri: 12, MIMIC: 7, NHANES: 15, CDC2022: 60}
+  MICE:        {AutoMPG: 1, Concrete: 1, eICU: 4, ComCri: 1, MIMIC: 5, NHANES: 2, CDC2022: 20}
+  MeanMode:    {AutoMPG: 1, Concrete: 1, eICU: 1, ComCri: 1, MIMIC: 1, NHANES: 1, CDC2022: 2}
+
+failure_policy:
+  on_run_failure: write_error_log_and_continue
+  silent_skip: forbidden
+  _reason: |
+    R0's 300 failed deep runs were excluded by a comment in an aggregation
+    script and never surfaced in the paper. Every failure in P2 is written to
+    error.log and listed individually in the phase report.

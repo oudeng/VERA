@@ -1,0 +1,11 @@
+# Fig. 1 — the VERA evaluation protocol
+
+![The VERA evaluation protocol](Fig_vera.png)
+
+**Fig. 1** The VERA evaluation protocol. VERA evaluates audit readouts relative to their declared claim and scope (intended semantics as declared by the artifact: association or model reliance; VERA does not operationalize a causal-effect reference). Candidate and comparator readouts are first mapped to a common target–source representation and screened for applicability and circularity. Structural recovery is evaluated against known generating adjacency in synthetic benchmarks; stability alignment against within-host repeatability and across-run host variability; behavioral faithfulness against the prespecified same-host permutation-ablation reference, with redrawn-permutation and grouped-permutation robustness checks (Sect. 4.4); leakage-risk discrimination using controlled proxy injections and zero-increment discrepancy controls under threshold-calibrated discrimination with empirical null rates reported; and resource cost under separate incremental and end-to-end accounting. Axis-wise effect sizes and axis-appropriate uncertainty are reported, and prespecified non-compensatory rules are applied only where defined. The output is the axis-wise evidence profile. No mapping from the axes to a single claim status was committed before measurement, so no formal overall verdict is reported; any reading of the profile as a whole is a post-hoc synthesis (Sect. 3.7). Resource cost is an operational dimension reported alongside the validity axes. The same-host permutation readout serves as a positive control and is not scored on the faithfulness axis because it defines the behavioral reference.
+
+---
+
+The caption above is the manuscript's own, extracted from `paperY_main.tex` with its cross-references resolved; it is not transcribed. `Fig_vera.pdf` is the vector original as submitted, sha256 `c6a7e5e2cfded6766e1c9d5ada72e06b2b24f6c374801ebbb09ebe52c7f0f634`; `Fig_vera.png` is rendered from it at 200 dpi for inline display.
+
+**This figure is not covered by the repository's MIT license.** It is the authors' own work, provided here so the protocol can be understood without reading the paper. Rights in it are reserved pending the journal's publishing agreement.
