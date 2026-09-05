@@ -1,0 +1,881 @@
+schema_version: 1
+
+_comment: |-
+  Missing-mechanism specification, one block per dataset x mechanism.
+  Consumed by code_SNI/missingness/ (task T1.5). Engineering principle E1: this
+  file is the single source of truth for how masks are made; no driver, slope or
+  mode may be hard-coded in Python.
+
+  ============================================================================
+  `clinical_v1` IS THE PUBLISHED SPECIFICATION (filled in at T2.2(a))
+  ============================================================================
+  Through P1 this profile was `clinical_v1_PLACEHOLDER` and its drivers were
+  explicitly not the ones to be published, pending the T1.6(b) driver evidence
+  and the T1.6(c) MIMIC replacement decision. Both are now settled, so the
+  placeholder is gone and every block below carries a `rationale` written to be
+  printed verbatim in the supplementary material.
+
+  Two things a later reader should not have to reconstruct:
+
+  * Every MAR driver is listed in that dataset's `always_observed` and is never
+    masked, because a MAR mechanism may condition only on observed data. The
+    resulting loss of evaluation coverage is stated per dataset.
+  * The specification for CDC2022 was written from survey-methodology principles
+    and deliberately NOT fitted to `heart_2022_with_nans.csv`, so that the
+    real-versus-simulated comparison in T2.2(d) is a test rather than a
+    restatement of its own fit.
+  ============================================================================
+
+  Resolution order, later wins:
+    defaults
+      <- profiles[<profile>].defaults
+      <- profiles[<profile>].datasets[<DS>].common
+      <- profiles[<profile>].datasets[<DS>][<MCAR|MAR|MNAR>]
+      <- explicit kwargs to missingness.spec.resolve()
+
+  Column roles and types are NOT declared here. They come from
+  configs/datasets.yaml, which stays the single source of truth for schema.
+
+# ---------------------------------------------------------------------------
+# Engineering defaults. These are mechanism-neutral knobs, not science.
+# ---------------------------------------------------------------------------
+defaults:
+  seed: 2025                    # matches datasets.yaml: seeds.missingness_generator
+  tolerance: 0.01               # max |achieved - target| per column
+  min_missing_per_col: 1
+  rate_calibration: per_column  # per_column | table | none
+  always_observed: []           # identifier is added automatically from datasets.yaml
+
+  mar:
+    mode: per_column            # per_column | row_broadcast_legacy
+    # 'auto' lets an undeclared coefficient be drawn from the column's own RNG
+    # stream on [-auto_strength, +auto_strength], sign preserved, |beta| pushed
+    # off zero by auto_min_abs. Set to 'config' to make an undeclared
+    # coefficient a hard error (recommended once T1.6 fixes the drivers).
+    coefficient_default: auto
+    auto_strength: 1.5
+    auto_min_abs: 0.2
+
+  mnar:
+    continuous_mode: logit      # logit | quantile_steps (R0 comparison mode)
+    categorical_mode: ordinal   # ordinal | semantic_groups | random_split (R0 mode)
+    strength: 1.5
+    min_abs: 0.2
+    # Only read by mode 'quantile_steps' / 'random_split'. Values are R0's
+    # defaults from missing_data_generator._mnar_propensity (:473-491), kept so
+    # the comparison mode is exactly the old mechanism.
+    quantile_steps:
+      q_low: 0.25
+      q_mid: 0.50
+      q_high: 0.75
+      p_low_mult: 0.4
+      p_mid_low_mult: 0.8
+      p_mid_high_mult: 1.2
+      p_high_mult: 1.8
+      cat_high_frac: 0.5
+      cat_high_mult: 1.5
+      cat_low_mult: 0.7
+
+# ---------------------------------------------------------------------------
+# Schema reference (documentation only; not parsed).
+# ---------------------------------------------------------------------------
+_schema_reference:
+  mar:
+    default:
+      _doc: Table-level fallback applied to every target column with no own entry.
+      drivers: [<column>, ...]
+      coefficients:
+        <driver>: <float>          # slope on the standardized driver; sign is meaningful
+    columns:
+      <target_column>:
+        _doc: Per-column override. This is the per-column heterogeneity R0 lacked.
+        drivers: [<column>, ...]
+        coefficients:
+          <continuous_driver>: <float>
+          <categorical_driver>: {<level>: <logit offset>, ...}   # or a plain float
+        rate: <float>              # optional per-column target-rate override
+  mnar:
+    columns:
+      <column>:
+        mode: logit | ordinal | semantic_groups | quantile_steps | random_split
+        coefficient: <float>       # slope on the standardized own value
+        level_order: [<level>, ...]        # ordinal mode: explicit ordering
+        groups: {<group>: [<level>, ...]}  # semantic_groups mode
+        group_offsets: {<group>: <float>}  # semantic_groups mode, additive logit
+        rate: <float>
+
+_invariants:
+  - Every column named as a MAR driver anywhere in a dataset block is forced
+    fully observed under MCAR, MAR *and* MNAR. This preserves R0's strict-MAR
+    guarantee (missing_data_generator.py:638-654) and additionally keeps the set
+    of evaluated columns identical across mechanisms, so the three masks of a
+    dataset remain comparable.
+  - Making a column a driver therefore costs evaluation coverage. Record the
+    cost in the T1.6(b) table (`k/d columns excluded`).
+  - The intercept is always fitted by bisection so that mean(p) equals the
+    target rate exactly; declared coefficients are never rescaled.
+
+# ---------------------------------------------------------------------------
+profiles:
+
+  # =========================================================================
+  # LEGACY. Reproduces the R0 submitted behavior so old and new masks can be
+  # compared on the same footing. Do not use for new results.
+  # =========================================================================
+  record_index_ID:
+    status: LEGACY_R0_REPRODUCTION
+    description: |-
+      Exactly what R0 shipped: MAR driven by the `ID` column, which is a
+      1..n record counter with no clinical meaning (verified in every
+      project_sni_R0/sni/data/*/*_MAR_*_meta.json: "mar_driver_cols": ["ID"],
+      "mar_logistic_scale": 1.0, "strict_mar": true).
+
+      Consequences reproduced on purpose:
+        * one row-level propensity broadcast to all columns (np.repeat,
+          missing_data_generator.py:467);
+        * intercept set by the mean-linear rescale p*(rate/mean_p)
+          (missing_data_generator.py:460-464);
+        * MNAR continuous = 4-quantile step function (:505-526);
+        * MNAR categorical = random 50% of levels marked high-missing (:529-553);
+        * table-level rate calibration only, so per-column rates drift (B39).
+
+      Measured pathology in the R0 masks at 30%:
+        Pearson r between per-row missing rate and row index
+          MIMIC +0.667 | eICU +0.804 | NHANES +0.729
+          AutoMPG +0.710 | ComCri +0.690 | Concrete +0.676
+      This is reviewer point R1-4 in one number.
+    defaults:
+      # `legacy_R0` routes generation to missingness/legacy.py, a verbatim port
+      # of R0's generate_missing_dataset including its single shared RNG stream.
+      # Verified bit-identical to all 54 stored R0 masks (6 datasets x 3
+      # mechanisms x 3 rates) by tests/test_missingness.py.
+      implementation: legacy_R0
+      rate_calibration: table
+      mar:
+        mode: row_broadcast_legacy
+        logistic_scale: 1.0
+      mnar:
+        continuous_mode: quantile_steps
+        categorical_mode: random_split
+    datasets:
+      # `legacy_column_types` reproduces the typing R0's dtype heuristic
+      # (missing_data_generator.infer_column_types:179-185) actually produced,
+      # which is what the stored masks were made with. It is NOT necessarily the
+      # typing declared in configs/datasets.yaml — see the Concrete note below.
+      MIMIC:
+        MAR: {mar: {default: {drivers: [ID]}}}
+      eICU:
+        MAR: {mar: {default: {drivers: [ID]}}}
+      NHANES:
+        MAR: {mar: {default: {drivers: [ID]}}}
+      AutoMPG:
+        MAR: {mar: {default: {drivers: [ID]}}}
+      ComCri:
+        MAR: {mar: {default: {drivers: [ID]}}}
+      Concrete:
+        # DISCREPANCY, flagged for the first author (not resolved in P1):
+        # configs/datasets.yaml declares Concrete.Duration `continuous`
+        # (14 integer levels, range 1-365), but R0 masked it as `categorical`
+        # (Concrete_*_meta.json: "categorical": ["Duration"]). The two口径 give
+        # different MNAR mechanisms AND different evaluation metrics
+        # (accuracy vs NRMSE). Reproducing R0 requires R0's typing, pinned here.
+        common:
+          legacy_column_types:
+            continuous: [Cement, BlastFurnaceSlag, FlyAsh, Water, Superplasticizer,
+                         CoarseAggregate, FineAggregate, ConcreteCS]
+            categorical: [Duration]
+            excluded: [ID]
+        MAR: {mar: {default: {drivers: [ID]}}}
+
+  # =========================================================================
+  # PLACEHOLDER. Schema demonstration only. Drivers pending T1.6.
+  # =========================================================================
+  clinical_v1:
+    status: ACTIVE
+    description: |-
+      The published missingness specification (T2.2(a)). Every `rationale` in
+      this profile is written to be printed verbatim in the supplementary
+      material, so each one has to survive a clinical or domain reviewer.
+
+      **The design rule for MAR drivers.** A MAR mechanism must condition only on
+      observed data, so any variable used as a driver is placed in
+      `always_observed` and is never masked. That costs evaluation coverage, and
+      the cost is stated per dataset below. The drivers were chosen so that the
+      cost is *principled* rather than convenient: in the two ICU tables the
+      always-observed set is exactly the administrative and admission-context
+      block (age, sex, comorbidity burden or consciousness level, ventilation
+      status), which in a real electronic record is captured for every stay,
+      while the masked set is the measured physiology, which is charted only when
+      ordered or when the necessary device is in place. Missingness in the
+      measured variables therefore depends on context that is genuinely always
+      recorded -- which is what MAR means, rather than a modeling convenience.
+
+      **Sign heterogeneity is deliberate, not decorative.** R0 broadcast one
+      propensity vector across every column (B50), so no column could respond to
+      a driver differently from any other. Several blocks below give the *same*
+      driver opposite signs in different columns, each time for a stated reason;
+      `sensitivity` in the T2.2(c) diagnostic is what verifies that the generated
+      mask actually reproduces them.
+
+      **On row order.** AutoMPG is sorted by `model_year` and `model_year` is
+      also its only defensible MAR driver (B51). A mask built on it will
+      therefore correlate with the row index. That is a property of the table,
+      not a defect of the mechanism, and item 2 of the diagnostic
+      (`corr(driver, row index)`) is what separates the two. The alternative --
+      picking a weaker driver to make item 1 look clean -- would be choosing the
+      appearance of rigor over the substance of it.
+    datasets:
+
+      # ---- MIMIC ---------------------------------------------------------
+      # Built by data_layer/build_mimic.py from mimic_icu_mortality_real.csv,
+      # replacing the 2052 x 8 table whose ALARM target was unusable (B36, and
+      # T1.6(c)). 16 features; 4 are always-observed drivers, leaving 12
+      # imputable -- an evaluation coverage of 75%.
+      MIMIC:
+        common:
+          always_observed: [age_years, gender, charlson_index,
+                            mechanical_ventilation]
+        MCAR:
+          rationale: >-
+            A mechanism-neutral reference condition. Every measured variable is
+            withheld with the same probability, independent of the patient and of
+            every recorded value, so it isolates how much of each imputer's
+            performance is attributable to the mechanism rather than to the
+            marginal amount of missing data.
+        MAR:
+          rationale: >-
+            In an intensive care record, age, sex, comorbidity burden and
+            ventilation status are captured administratively for every stay,
+            whereas measured physiology is charted only when a test is ordered or
+            when the necessary device is in place. Sicker and mechanically
+            ventilated patients are investigated more intensively, so their
+            laboratory values are recorded more completely, while ventilation
+            simultaneously removes the clinical meaning of a spontaneous
+            respiratory rate and so makes that particular observation less likely
+            to be charted. Missingness therefore depends on admission context
+            that is itself always observed.
+          mar:
+            default:
+              drivers: [charlson_index, age_years]
+              coefficients: {charlson_index: -0.5, age_years: 0.2}
+            columns:
+              # Investigated more intensively when sicker => LESS missing.
+              lactate_mmol_L:
+                drivers: [charlson_index, mechanical_ventilation]
+                coefficients: {charlson_index: -0.9, mechanical_ventilation: -1.1}
+              creatinine_mg_dL:
+                drivers: [charlson_index, age_years]
+                coefficients: {charlson_index: -0.6, age_years: -0.4}
+              hemoglobin_min:
+                drivers: [charlson_index]
+                coefficients: {charlson_index: -0.5}
+              # SIGN FLIP on mechanical_ventilation, against lactate above. Under
+              # controlled ventilation the spontaneous respiratory rate is not a
+              # meaningful bedside observation, so it is frequently left blank
+              # exactly where the laboratory panel is most complete. R0's
+              # row-broadcast MAR could not represent this at all (B50).
+              RespRate_max:
+                drivers: [mechanical_ventilation]
+                coefficients: {mechanical_ventilation: 1.0}
+              # Continuous pulse oximetry is mandatory on a ventilator.
+              SpO2_min:
+                drivers: [mechanical_ventilation]
+                coefficients: {mechanical_ventilation: -0.8}
+              # An indwelling catheter, and therefore hourly output charting, is
+              # near-universal once ventilated; older patients are more often
+              # managed without one.
+              urine_output_min:
+                drivers: [mechanical_ventilation, age_years]
+                coefficients: {mechanical_ventilation: -1.2, age_years: 0.3}
+              # An arterial line is more likely once ventilated, and it is what
+              # produces a continuously charted pressure.
+              MAP_mmHg:
+                drivers: [mechanical_ventilation, age_years]
+                coefficients: {mechanical_ventilation: -0.4, age_years: 0.2}
+              SBP_min:
+                drivers: [mechanical_ventilation]
+                coefficients: {mechanical_ventilation: -0.4}
+              DBP_min:
+                drivers: [mechanical_ventilation]
+                coefficients: {mechanical_ventilation: -0.4}
+              vasopressor_dose:
+                drivers: [charlson_index]
+                coefficients: {charlson_index: -0.7}
+        MNAR:
+          rationale: >-
+            Several bedside measurements fail precisely at the extreme of their
+            own range. Peripheral pulse oximetry loses its signal when perfusion
+            is poorest, so the lowest saturations are the ones that never reach
+            the record; a non-invasive cuff similarly fails to return a reading at
+            very low pressures; and an anuric patient has no urine output to
+            measure. In each case the probability that a value is missing depends
+            on that value itself, which is the defining feature of MNAR and is a
+            documented artifact of the instruments rather than a modeling
+            device. The one laboratory value in the set runs the other way:
+            the highest lactate values arise during acute deterioration, when
+            scheduled sampling is most often displaced by treatment, so for
+            lactate it is the high extreme that is less likely to be recorded.
+          mnar:
+            default: {mode: logit, coefficient: 0.8}
+            columns:
+              SpO2_min:         {mode: logit, coefficient: -1.2}
+              MAP_mmHg:         {mode: logit, coefficient: -0.9}
+              SBP_min:          {mode: logit, coefficient: -0.9}
+              DBP_min:          {mode: logit, coefficient: -0.9}
+              urine_output_min: {mode: logit, coefficient: -0.8}
+              lactate_mmol_L:   {mode: logit, coefficient: 0.6}
+
+      # ---- eICU ----------------------------------------------------------
+      # Same 16-column template as MIMIC after both rebuilds -- the two derived
+      # tables come from the same extraction design. Disclosed in the P2
+      # checkpoint report, because a reader is entitled to know that the two ICU
+      # datasets are not schema-independent. 16 features, 4 drivers, 12
+      # imputable -- coverage 12/16 = 75%.
+      eICU:
+        common:
+          always_observed: [age_years, gender_std, gcs,
+                            mechanical_ventilation_std]
+        MCAR:
+          rationale: >-
+            A mechanism-neutral reference condition, identical in construction to
+            MIMIC's, so that any difference between the two datasets under MCAR
+            is attributable to their distributions rather than to their masks.
+        MAR:
+          rationale: >-
+            The Glasgow Coma Scale is recorded for every admission and determines
+            whether a patient can cooperate with measurement at all. A patient who
+            cannot follow commands cannot participate in any observation
+            requiring cooperation, and is simultaneously investigated more
+            aggressively by laboratory testing, so a low GCS raises missingness in
+            some variables while lowering it in others. Ventilation status acts
+            through the same route as in MIMIC, by determining which devices are
+            attached.
+          mar:
+            default:
+              drivers: [gcs, age_years]
+              coefficients: {gcs: -0.8, age_years: 0.3}
+            columns:
+              lactate_mmol_l:
+                drivers: [gcs, mechanical_ventilation_std]
+                coefficients: {gcs: -1.2, mechanical_ventilation_std: -0.9}
+              urine_output_min:
+                drivers: [gcs, mechanical_ventilation_std]
+                coefficients: {gcs: -0.4, mechanical_ventilation_std: -1.1}
+              # SIGN FLIP on gcs, against lactate above: a fully conscious patient
+              # is more likely to be off continuous monitoring altogether, so the
+              # saturation trace is more often absent for them, not less.
+              spo2_min:
+                drivers: [gcs]
+                coefficients: {gcs: 0.7}
+              # Categorical driver with explicit per-level logit offsets.
+              hemoglobin_min:
+                drivers: [mechanical_ventilation_std, age_years]
+                coefficients:
+                  mechanical_ventilation_std: {0: 0.5, 1: -0.8}
+                  age_years: 0.4
+              resprate_max:
+                drivers: [mechanical_ventilation_std]
+                coefficients: {mechanical_ventilation_std: 1.0}
+              creatinine_mg_dl:
+                drivers: [gcs, age_years]
+                coefficients: {gcs: -0.6, age_years: -0.4}
+              map_mmhg:
+                drivers: [mechanical_ventilation_std]
+                coefficients: {mechanical_ventilation_std: -0.4}
+              sbp_min:
+                drivers: [mechanical_ventilation_std]
+                coefficients: {mechanical_ventilation_std: -0.4}
+              dbp_min:
+                drivers: [mechanical_ventilation_std]
+                coefficients: {mechanical_ventilation_std: -0.4}
+        MNAR:
+          rationale: >-
+            The same instrument-failure argument as for MIMIC: pulse oximetry and
+            non-invasive pressure measurement both fail at the low end of their
+            own range, and urine output cannot be measured in an anuric patient,
+            so the values least likely to be recorded are the most extreme ones.
+            As in MIMIC, lactate runs the other way: its highest values arise
+            during acute deterioration, when scheduled sampling is most often
+            displaced by treatment.
+          mnar:
+            default: {mode: logit, coefficient: 0.8}
+            columns:
+              spo2_min:         {mode: logit, coefficient: -1.2}
+              map_mmhg:         {mode: logit, coefficient: -0.9}
+              sbp_min:          {mode: logit, coefficient: -0.9}
+              dbp_min:          {mode: logit, coefficient: -0.9}
+              urine_output_min: {mode: logit, coefficient: -0.8}
+              lactate_mmol_l:   {mode: logit, coefficient: 0.6}
+
+      # ---- NHANES --------------------------------------------------------
+      # Rebuilt by data_layer/build_nhanes.py once BPQ_J/DIQ_J/SMQ_J/FASTQX_J
+      # were downloaded (B61 -- the original script degraded silently without
+      # them). 15 features, 4 drivers, 11 imputable -- coverage 11/15 = 73%.
+      # `metabolic_score` is the downstream target and is not a feature at all.
+      NHANES:
+        common:
+          # P2b decision 2(b): `fasting_state_std` is NO LONGER a driver.
+          #
+          # It is the mechanism the survey itself documents and the only one in
+          # the benchmark that can be checked against a source rather than
+          # argued for -- and the complete-case construction destroys it. The
+          # fasting-dependent assays exist only for fasting participants, so
+          # dropping rows with any missing value drops the non-fasting
+          # participants with them: 46.8 % fasting in the source cycle, 95.9 %
+          # here (2150 against 92). A driver that is 96 % constant cannot drive
+          # anything, and its decile contrast is not weak but undefined
+          # (finding B72).
+          #
+          # The mechanism is not abandoned, only moved: T2b.2's mechanism-
+          # validation analysis measures it on the UNFILTERED source table and
+          # is what the `age` coefficients below are calibrated against. See
+          # data_layer/nhanes_mechanism.py.
+          always_observed: [age, gender_std, smoking_std]
+        MCAR:
+          rationale: >-
+            A mechanism-neutral reference condition, withholding each measurement
+            independently of the participant and of every recorded value.
+          rationale_note: >-
+            Worth stating plainly in the supplement: for NHANES this condition is
+            counterfactual rather than merely simplified, because the survey's own
+            missingness is generated by a documented design (see the MAR block)
+            that is the opposite of completely random.
+        MAR:
+          rationale: >-
+            Three statements about NHANES must be kept distinct, and their
+            relationship is the point. (1) The measured mechanism, on the
+            unfiltered source table: participants are assigned to a morning
+            fasting session or an afternoon session, and the fasting-dependent
+            assays are run only on the fasting subsample. In the 2017-2018 cycle
+            triglycerides are missing for 95.0% of non-fasting participants
+            against 20.6% of fasting ones (74.4 percentage points; fasting
+            glucose 94.9% against 19.2%), while five assays with no fasting
+            requirement show a mean contrast of 0.148 -- a 29-fold specificity
+            ratio. Fasting status is recorded for everyone, so this is
+            missingness at random by construction, and it is the only mechanism
+            in this benchmark that can be verified against its source rather
+            than argued for. (2) Why it is nevertheless NOT in the
+            specification below: the standard complete-case construction of the
+            benchmark table discards 96.2% of the non-fasting participants
+            (2,422 to 92) together with their missing assays, leaving fasting
+            status 95.9% constant -- a driver with no variance cannot drive
+            anything. This is not a limitation of the simulator; it is the
+            benchmark-construction defect this paper reports (main text,
+            real-versus-simulated section): the rows discarded to make the
+            table complete are exactly the rows in which the real mechanism is
+            visible. (3) What the measurement is used for here: it anchors the
+            RELATIVE ordering of the age coefficients -- the two
+            fasting-dependent assays receive the largest age coefficients and
+            the no-fasting-requirement control the smallest -- but no
+            coefficient magnitude reproduces the measured 4.3-4.4 log-odds
+            contrast, and none could, since the driver that carries it is gone.
+            The age route itself is the survey's second-order effect: older
+            participants complete fewer examination components, so the
+            anthropometric measurements are less complete for them.
+          # CALIBRATION, not a round number. The measured gaps above correspond
+          # to a top-versus-bottom log-odds contrast of
+          #   logit(0.950) - logit(0.206) = 4.29   (triglycerides)
+          #   logit(0.949) - logit(0.192) = 4.36   (fasting glucose)
+          # For a standardized Bernoulli(p) driver the contrast a coefficient
+          # beta produces is beta / sqrt(p(1-p)), so the values below are set
+          # from the observed fasting prevalence rather than chosen by feel.
+          # T2.2(c) item 5 re-measures the achieved contrast and the checkpoint
+          # report states the residual against 4.29 / 4.36.
+          _calibration:
+            status: MEASURED_ON_SOURCE_REPORTED_SEPARATELY
+            measured_on: "unfiltered NHANES 2017-2018 adults, n=5410 with a recorded fasting status (data_layer/nhanes_mechanism.py)"
+            fasting_dependent_assays:
+              fasting_glucose: {missing_if_fasting: 0.1921, missing_if_not: 0.9492, logodds_contrast: 4.3645}
+              triglycerides:   {missing_if_fasting: 0.2062, missing_if_not: 0.9500, logodds_contrast: 4.2936}
+            fasting_independent_control_mean_contrast: 0.148
+            specificity_ratio: 29.2
+            why_not_applied_here: >-
+              **Finding B72, resolved by P2b decision 2(b).** The measurement is
+              real and specific -- the two assays the protocol restricts show a
+              contrast of 4.29-4.36 against 0.148 for five columns with no
+              fasting requirement, a 29-fold separation. It cannot be applied to
+              this table, because the complete-case step discards 96.2 % of the
+              non-fasting participants (2422 -> 92) along with their missing
+              assays, leaving the driver 95.9 % constant. A driver whose top and
+              bottom deciles are the same rows yields an undefined contrast, not
+              a weak one. `fasting_state_std` is therefore no longer a driver and
+              is an ordinary maskable column.
+            what_the_measurement_is_used_for: >-
+              It is the effect size the `age` coefficients below are scaled
+              against, so the specification is calibrated rather than invented,
+              and it is reported in the ESM as the benchmark's one MAR mechanism
+              that can be verified against its source instead of argued for.
+          mar:
+            default:
+              drivers: [age]
+              coefficients: {age: 0.5}
+            columns:
+              # By survey design, not by inference. Both assays exist only for
+              # the morning fasting subsample, so the coefficient is the largest
+              # in the whole specification and its sign is not in question.
+              # Calibrated against the measured mechanism, not invented: on the
+              # unfiltered source table non-fasting participants are missing this
+              # assay 94.9 % of the time against 19.2 % for fasting ones, a
+              # log-odds contrast of 4.36. That contrast cannot be reproduced
+              # here because the driver is gone (B72, decision 2b), so what
+              # survives is the age route, and the ESM reports the measured
+              # mechanism separately via the T2b.2 analysis.
+              fasting_glucose:
+                drivers: [age]
+                coefficients: {age: 0.6}
+              triglycerides:
+                drivers: [age]
+                coefficients: {age: 0.6}
+              # HDL needs no fasting, so the same driver acts far more weakly
+              # here -- a magnitude contrast on one driver, which the diagnostic
+              # can check directly against the assay protocol.
+              hdl_cholesterol:
+                drivers: [age]
+                coefficients: {age: 0.3}
+              # Physical examination components: older participants complete
+              # fewer of them.
+              waist_circumference:
+                drivers: [age]
+                coefficients: {age: 0.8}
+              bmi:
+                drivers: [age]
+                coefficients: {age: 0.6}
+              systolic_bp:
+                drivers: [age]
+                coefficients: {age: 0.4}
+              diastolic_bp:
+                drivers: [age]
+                coefficients: {age: 0.4}
+              # SIGN FLIP on age: HbA1c requires no fasting and no examination
+              # component, and is drawn more often in older participants because
+              # they are screened for diabetes more often.
+              hba1c:
+                drivers: [age]
+                coefficients: {age: -0.3}
+              # The medication gates are asked of everyone who reaches the
+              # interview, so they depend on smoking status only through general
+              # interview completeness.
+              bp_med_std:
+                drivers: [age, smoking_std]
+                coefficients: {age: 0.3, smoking_std: 0.4}
+              lipid_med_std:
+                drivers: [age, smoking_std]
+                coefficients: {age: 0.3, smoking_std: 0.4}
+              glucose_med_std:
+                drivers: [age, smoking_std]
+                coefficients: {age: 0.3, smoking_std: 0.4}
+        MNAR:
+          rationale: >-
+            Self-reported and laboratory values at the extremes are the ones most
+            likely to go unrecorded: a participant whose measurement falls outside
+            the assay's reportable range has no value returned, and participants
+            with the most adverse values are the most likely to break off the
+            examination. Missingness therefore depends on the unobserved value
+            itself.
+          mnar:
+            default: {mode: logit, coefficient: 0.8}
+            columns:
+              fasting_glucose:     {mode: logit, coefficient: 1.0}
+              triglycerides:       {mode: logit, coefficient: 1.0}
+              hdl_cholesterol:     {mode: logit, coefficient: -0.7}
+              waist_circumference: {mode: logit, coefficient: 0.9}
+              bmi:                 {mode: logit, coefficient: 0.9}
+              # Categorical gates: ordinal ranking of the 0/1 codes.
+              bp_med_std:      {mode: ordinal, coefficient: 0.5}
+              lipid_med_std:   {mode: ordinal, coefficient: 0.5}
+              glucose_med_std: {mode: ordinal, coefficient: 0.5}
+
+      # ---- CDC2022 -------------------------------------------------------
+      # New in R1, answering R2-4 ("real tables are usually wider"). 40 columns
+      # against the 8-16 of every other dataset. 3 drivers, 37 imputable (93%) --
+      # 39 features (excluding ID; HadHeartAttack is the target), 2 drivers, 37
+      # imputable -- coverage 37/39 = 95%. The coverage cost of the driver rule
+      # falls as the table widens, which is itself worth stating.
+      #
+      # This is also the project's only real-versus-simulated control: the
+      # companion file heart_2022_with_nans.csv carries an unsimulated
+      # missingness pattern over 445,132 rows. The specification below is written
+      # from survey-methodology principles ALONE and was deliberately NOT tuned
+      # to match that file, so the T2.2(d) comparison is a test rather than a
+      # restatement of the fit.
+      CDC2022:
+        common:
+          # State was in this list in the first draft and used by nothing. An
+          # always-observed column that drives no mechanism costs evaluation
+          # coverage for no scientific return, so it is out. State-level
+          # variation in BRFSS completeness is real, but expressing it would take
+          # 54 unordered per-level offsets, which is not a mechanism anyone could
+          # defend as clinically motivated.
+          always_observed: [Sex, AgeCategory]
+        MCAR:
+          rationale: >-
+            A mechanism-neutral reference condition, and the widest table in the
+            benchmark, so it is also where the effect of dimensionality on each
+            imputer is least confounded with the effect of the mechanism.
+        MAR:
+          rationale: >-
+            BRFSS is a telephone survey, and item non-response in a telephone
+            survey is driven by who the respondent is and how long they stay on
+            the call. Age is the dominant such factor: older respondents break off
+            longer interviews more often and decline the sensitive items more
+            often, and sex predicts refusal on the self-reported body measures.
+            Both are recorded at the start of every interview and are complete in
+            the released file.
+          mar:
+            default:
+              drivers: [AgeCategory]
+              coefficients: {AgeCategory: 0.5}
+            columns:
+              # Sensitive items: declined more often, and much more often by
+              # older respondents.
+              HIVTesting:
+                drivers: [AgeCategory, Sex]
+                coefficients: {AgeCategory: 1.2, Sex: {0: -0.2, 1: 0.2}}
+              HighRiskLastYear:
+                drivers: [AgeCategory]
+                coefficients: {AgeCategory: 1.1}
+              AlcoholDrinkers:
+                drivers: [AgeCategory]
+                coefficients: {AgeCategory: 0.8}
+              # Recall-burden items: a numeric recall over the last 30 days.
+              PhysicalHealthDays:
+                drivers: [AgeCategory]
+                coefficients: {AgeCategory: 0.7}
+              MentalHealthDays:
+                drivers: [AgeCategory]
+                coefficients: {AgeCategory: 0.7}
+              # SIGN FLIP on AgeCategory: preventive-care items are recalled
+              # BETTER by older respondents, who receive these services routinely
+              # and are asked about them at every visit.
+              FluVaxLast12:
+                drivers: [AgeCategory]
+                coefficients: {AgeCategory: -0.6}
+              PneumoVaxEver:
+                drivers: [AgeCategory]
+                coefficients: {AgeCategory: -0.5}
+              LastCheckupTime:
+                drivers: [AgeCategory]
+                coefficients: {AgeCategory: -0.4}
+              # Self-reported body measurements: refused more often by women in
+              # survey-methodology studies of self-reported weight.
+              WeightInKilograms:
+                drivers: [Sex, AgeCategory]
+                coefficients: {Sex: {0: 0.4, 1: -0.4}, AgeCategory: 0.3}
+              HeightInMeters:
+                drivers: [Sex, AgeCategory]
+                coefficients: {Sex: {0: 0.2, 1: -0.2}, AgeCategory: 0.3}
+        MNAR:
+          rationale: >-
+            Non-response to a self-report item depends on the answer the
+            respondent would have given. Respondents at the adverse end of a
+            sensitive scale -- the heaviest, the least active, those with the most
+            poor-health days -- are the most likely to decline that item
+            specifically, so the missingness depends on the value that is
+            withheld.
+          mnar:
+            default: {mode: ordinal, coefficient: 0.6}
+            columns:
+              WeightInKilograms:  {mode: logit, coefficient: 1.0}
+              BMI:                {mode: logit, coefficient: 1.0}
+              HeightInMeters:     {mode: logit, coefficient: -0.5}
+              PhysicalHealthDays: {mode: logit, coefficient: 0.8}
+              MentalHealthDays:   {mode: logit, coefficient: 0.8}
+              SleepHours:         {mode: logit, coefficient: -0.4}
+              GeneralHealth:      {mode: ordinal, coefficient: 0.9}
+              HadHeartAttack:     {mode: ordinal, coefficient: 0.7}
+              SmokerStatus:       {mode: ordinal, coefficient: 0.7}
+
+      # ---- AutoMPG -------------------------------------------------------
+      # 7 features (mpg is the target), 2 drivers, 5 imputable -- coverage 5/7 =
+      # 71%. READ THE NOTE ON ROW ORDER in
+      # this profile's description: the table is sorted by model_year and
+      # model_year is also the driver, so item 1 of the T2.2(c) diagnostic is
+      # expected to exceed its threshold here and item 2 is what attributes it.
+      AutoMPG:
+        common:
+          always_observed: [model_year, origin]
+        MCAR:
+          rationale: >-
+            A mechanism-neutral reference condition on a small, well-understood
+            regression benchmark, included so that the comparison is not confined
+            to health data.
+        MAR:
+          rationale: >-
+            The dataset was assembled from vehicle specification sheets collected
+            over thirteen model years, and record-keeping improved across that
+            period: entries for the earliest years are the least complete, which
+            is why the original UCI file has its six missing horsepower values
+            concentrated in older records. Manufacturing region enters through the
+            same route, since the domestic and imported specification sheets were
+            compiled by different sources. Both variables are recorded for every
+            vehicle.
+          mar:
+            default:
+              drivers: [model_year]
+              coefficients: {model_year: -0.7}
+            columns:
+              # The variable that is actually missing in the original file.
+              horsepower:
+                drivers: [model_year, origin]
+                coefficients: {model_year: -1.0, origin: {1: -0.3, 2: 0.2, 3: 0.4}}
+              # SIGN FLIP on model_year: acceleration was added to the
+              # specification sheets later than the other fields, so it is the one
+              # variable that is LESS complete in the more recent records.
+              acceleration:
+                drivers: [model_year]
+                coefficients: {model_year: 0.4}
+              displacement:
+                drivers: [model_year]
+                coefficients: {model_year: -0.5}
+              weight:
+                drivers: [model_year]
+                coefficients: {model_year: -0.4}
+        MNAR:
+          rationale: >-
+            Specification sheets omit the least flattering figures. Vehicles at
+            the extremes of power and fuel consumption are the ones whose values
+            are most often absent from the compiled record.
+          mnar:
+            default: {mode: logit, coefficient: 0.6}
+            columns:
+              horsepower:   {mode: logit, coefficient: 0.9}
+              mpg:          {mode: logit, coefficient: -0.7}
+              displacement: {mode: logit, coefficient: 0.6}
+              cylinders:    {mode: ordinal, coefficient: 0.5}
+
+      # ---- ComCri --------------------------------------------------------
+      # 9 features (ViolentCrimesPerPop is the target), 3 drivers, 6 imputable --
+      # coverage 6/9 = 67%.
+      ComCri:
+        common:
+          always_observed: [medIncome, RegionCode, UrbanType]
+        MCAR:
+          rationale: >-
+            A mechanism-neutral reference condition on a socio-economic table, so
+            that the benchmark is not confined to individual-level records.
+        MAR:
+          rationale: >-
+            Communities and Crime is assembled from returns filed voluntarily by
+            individual police departments, and the original data has substantial
+            genuine missingness concentrated in the departments least able to
+            file. Smaller, poorer and more rural jurisdictions have less
+            administrative capacity and report fewer fields; the region a
+            community belongs to determines which state-level reporting
+            requirements apply. Median income, region and urban type are recorded
+            for every community from census sources independent of the police
+            return, so they are observed even where the return is incomplete.
+          mar:
+            default:
+              drivers: [medIncome]
+              coefficients: {medIncome: -0.8}
+            columns:
+              PctUnemployed:
+                drivers: [medIncome, UrbanType]
+                coefficients: {medIncome: -1.2, UrbanType: {1: 0.4, 2: 0.0, 3: -0.3}}
+              # SIGN FLIP on medIncome: family-structure fields come from the
+              # census long form rather than the police return, and it is the
+              # wealthier suburban communities that most often suppress them for
+              # small-cell disclosure reasons.
+              PctFam2Par:
+                drivers: [medIncome]
+                coefficients: {medIncome: 0.5}
+              PctPopUnderPov:
+                drivers: [medIncome, RegionCode]
+                coefficients: {medIncome: -0.9, RegionCode: 0.2}
+              ViolentCrimesPerPop:
+                drivers: [medIncome]
+                coefficients: {medIncome: -0.6}
+        MNAR:
+          rationale: >-
+            A department with an exceptionally high crime rate has the strongest
+            incentive not to file, so the most extreme values are the ones least
+            likely to appear -- the classic reason crime statistics are
+            under-reported rather than merely noisy.
+          mnar:
+            default: {mode: logit, coefficient: 0.7}
+            columns:
+              ViolentCrimesPerPop: {mode: logit, coefficient: 1.0}
+              PctPopUnderPov:      {mode: logit, coefficient: 0.8}
+              PctUnemployed:       {mode: logit, coefficient: 0.8}
+              CrimeLevel:          {mode: ordinal, coefficient: 0.9}
+              IncomeLevel:         {mode: ordinal, coefficient: -0.8}
+              EducationLevel:      {mode: ordinal, coefficient: -0.6}
+
+      # ---- Concrete ------------------------------------------------------
+      # 8 features (ConcreteCS is the target), 1 driver, 7 imputable -- coverage
+      # 7/8 = 88%. `Duration` is reclassified from
+      # categorical to continuous in T2.1: it is curing age in days, spanning
+      # 1-365 over 14 observed levels, and treating a 365-day cure as an unordered
+      # category discards the ordering that the whole dataset is about.
+      Concrete:
+        common:
+          always_observed: [Duration]
+        MCAR:
+          rationale: >-
+            A mechanism-neutral reference condition. Concrete is also the only
+            dataset in the benchmark with no categorical column at all, so it is
+            the one setting where the categorical metrics are undefined -- a fact
+            that changes how the Overall column of Table 1 is weighted and that
+            the protocol note now states explicitly.
+        MAR:
+          rationale: >-
+            Compressive-strength testing is destructive and each specimen is
+            tested once, at a scheduled curing age. Specimens held for the longest
+            cures occupy laboratory space for up to a year, and the ancillary
+            mix-design fields for those long-running batches are the ones most
+            often left incomplete in the compiled record. Curing age is known for
+            every specimen by construction, since it is the scheduling variable.
+          mar:
+            default:
+              drivers: [Duration]
+              coefficients: {Duration: 0.7}
+            columns:
+              # Admixtures are optional constituents, recorded as zero when
+              # absent, and their fields are the least reliably transcribed.
+              Superplasticizer:
+                drivers: [Duration]
+                coefficients: {Duration: 1.0}
+              # SIGN FLIP on Duration: fly ash content is the field that
+              # long-cure studies specifically set out to measure, so it is
+              # recorded more carefully in exactly those batches.
+              FlyAsh:
+                drivers: [Duration]
+                coefficients: {Duration: -0.6}
+              BlastFurnaceSlag:
+                drivers: [Duration]
+                coefficients: {Duration: 0.5}
+              Water:
+                drivers: [Duration]
+                coefficients: {Duration: 0.3}
+        MNAR:
+          rationale: >-
+            Mixes at the extremes of the design space are the experimental ones,
+            run in small ad-hoc batches whose records are the least complete, so
+            the probability that a constituent is missing depends on that
+            constituent's own value.
+          mnar:
+            default: {mode: logit, coefficient: 0.6}
+            columns:
+              Superplasticizer: {mode: logit, coefficient: 0.9}
+              FlyAsh:           {mode: logit, coefficient: 0.8}
+              BlastFurnaceSlag: {mode: logit, coefficient: 0.8}
+              ConcreteCS:       {mode: logit, coefficient: 0.7}
+
+  # =========================================================================
+  # Mechanism-only sanity profile: no clinical claim, used by tests and by the
+  # `auto` coefficient path. Every target column gets an independent slope drawn
+  # from its own RNG stream, so heterogeneity is guaranteed without committing
+  # to any driver narrative.
+  # =========================================================================
+  auto_slopes_smoke:
+    status: TEST_ONLY
+    description: >-
+      Drivers must still be named per dataset; only the coefficients are drawn.
+      Used by tests/test_missingness.py to exercise the per-column heterogeneity
+      path without pre-empting the T1.6 driver decision.
+    defaults:
+      mar:
+        mode: per_column
+        coefficient_default: auto
+        auto_strength: 1.5
+        auto_min_abs: 0.2

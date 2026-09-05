@@ -1,0 +1,111 @@
+{
+ "built": "2026-08-28 11:54:52",
+ "head_commit": "da40778ae4999753f24dd94d744897646e335090",
+ "files": [
+  {
+   "path": "docs/T25_pilot_decision_rule.md",
+   "sha256": "367f426c02bc8473c7cd6790150e5d16564b71a0ff46765bb0a2011946eaa394",
+   "bytes": 5080,
+   "last_commit": "41c522df13e9b25c91ad84cfe16ba8190a591659 2026-07-30T11:37:06+09:00"
+  },
+  {
+   "path": "docs/T2d1_decision_rule.md",
+   "sha256": "064f4720738b03e1292daad4288b2c0031ab995f2c7dff3ded863da4462095de",
+   "bytes": 3650,
+   "last_commit": "686702f0b293e47dedb003e8556083e8d909b188 2026-07-29T13:13:32+09:00"
+  },
+  {
+   "path": "docs/T32_faithfulness_decision_rule.md",
+   "sha256": "056512e53aa48873b20deb69ed46bfe64577faf25dcfc97402f801cbdcd574c0",
+   "bytes": 3360,
+   "last_commit": "6030500f0cc7123e5808b6b46c94591b6b09cff3 2026-08-20T16:50:18+09:00"
+  },
+  {
+   "path": "docs/T32_R1_redundancy_precheck.md",
+   "sha256": "14a9ea6d0dee224b0c780f79da943e366fa8813a4108a4993605feaf94f7ba50",
+   "bytes": 3194,
+   "last_commit": "00a79849ab0426ac6c7becca92a446a136c7c365 2026-08-20T17:42:19+09:00"
+  },
+  {
+   "path": "docs/T42_leakage_rules.md",
+   "sha256": "55f30a5aafd947860fb5aaf71cb9fa847c7114f95b0dddb50392c2b88c7cbceb",
+   "bytes": 6112,
+   "last_commit": "e171f170d68fad484b406f237815b917610bff51 2026-08-25T00:23:19+09:00"
+  },
+  {
+   "path": "docs/T42_confirmatory_replication_rules.md",
+   "sha256": "68cc59cbe68f1904287dd9828acd1d82f6e21ff973c787ad055a72b4cfeb1eae",
+   "bytes": 3874,
+   "last_commit": "29f3a812dad6dfcef499dd12148c973ef97e993d 2026-08-27T19:42:23+09:00"
+  },
+  {
+   "path": "docs/T43_noprior_decision_rule.md",
+   "sha256": "29c1c87f64ccbf2d72c1a0abaf92a2a1f396e721f48a74071bcc6aec6929f344",
+   "bytes": 1988,
+   "last_commit": "653578718a054b774883d7a000a9858bb48200bd 2026-08-22T04:08:18+09:00"
+  },
+  {
+   "path": "docs/T43_interpretation_supplement.md",
+   "sha256": "d04fd860a3282f4c7b61f3f2fb7a8150947f7704fe66c234a8530e5ba66a7601",
+   "bytes": 6305,
+   "last_commit": "0be7e25fe3f731646c9bdd45f5876ae891e0a084 2026-08-24T00:15:49+09:00"
+  },
+  {
+   "path": "docs/T44_downstream_rules.md",
+   "sha256": "19ac20879b312ec5639ee7c4daee25ab7373530dc60db6f079a0cf35a82b37fb",
+   "bytes": 5335,
+   "last_commit": "a9c87f9ff39eb53a177d388e0cd184f810b3cdc1 2026-08-27T09:42:56+09:00"
+  },
+  {
+   "path": "docs/T45_statistics_rules.md",
+   "sha256": "44c77af4dac50b46cd9bc88eebf50a5d4a353c152a161a3702158b0e00d2981b",
+   "bytes": 3261,
+   "last_commit": "3025038f630a9c372e44b3c2d4a83cc02ed62df6 2026-08-27T09:42:03+09:00"
+  },
+  {
+   "path": "docs/T4F_presentation_rule.md",
+   "sha256": "46a4ebe17e540fb585b54b5a67cee70e266fca8727b30fb94935ffa2a242e008",
+   "bytes": 2984,
+   "last_commit": "f224cd273badd45145af10bd77ba3031b357876d 2026-08-21T14:19:14+09:00"
+  },
+  {
+   "path": "docs/T4F_score_verdict_rule.md",
+   "sha256": "5646ac0f2c2431d7b84d187552d2c932c658ff749abaa89481978c9c3c916a83",
+   "bytes": 2083,
+   "last_commit": "0cf4662e61201ed027475cbfd80d5f7cac275319 2026-08-21T20:10:54+09:00"
+  },
+  {
+   "path": "docs/T51_statistical_analysis_rules.md",
+   "sha256": "8cda5d2e9250a0d35ad2e4c003dd475d02b6fac43abbc42e74969134c2556a38",
+   "bytes": 7251,
+   "last_commit": "c2e82e200c132a96ad05eda68a621583061415e2 2026-08-27T20:43:43+09:00"
+  },
+  {
+   "path": "docs/T52_probe_triangulation_rules.md",
+   "sha256": "b7028272e13b0f72ef7b5739f05f96a7e944a2ffb0d933c2335f848e20870b90",
+   "bytes": 4553,
+   "last_commit": "d5796c3e1a1738d1da6f0b21ae11d98aa23ca0eb 2026-08-27T19:55:54+09:00"
+  }
+ ],
+ "commit_evidence": [
+  "c2e82e200c132a96ad05eda68a621583061415e2\n2026-08-27T20:43:43+09:00\nT51 addendum (Chat ruling 2026-08-29 item 2): MIMIC NoPrior family expands to the full 15-seed list; readout withheld until all 15 matrices exist (no intermediate 5-seed look); A3 idle window first, then the NP-MIMIC expansion pool\n\nZero-artifact attestation: at commit time no NP_MIMIC matrix of any seed exists (glob count 0; the 5-seed core pool is mid-training, nothing written).\n\nCo-Authored-By: Claude Fable 5 <noreply@anthropic.com>",
+  "d5796c3e1a1738d1da6f0b21ae11d98aa23ca0eb\n2026-08-27T19:55:54+09:00\nT52 probe-triangulation rules (P5R SS2): probe 2 = joint group permutation on archived models (zero retrain), clusters = connected components of the pre-registered T3.2-R1 pooled correlation at 0.8 (0.6/0.7 sensitivity), fresh disjoint RNG stream, group scores = member mean (sum as sensitivity), Delta rho_group into the T5.1 cluster-robust machinery; triangulation: 'not faithful behaviourally' requires BOTH probes to agree, disagreement is reported as the finding; probe 3 priced not run\n\nZero-artifact attestation: at commit time no group-permutation delta, group-level correlation, or triangulated verdict exists anywhere in the repository (results/T5_probe2 absent).\n\nCo-Authored-By: Claude Fable 5 <noreply@anthropic.com>",
+  "29f3a812dad6dfcef499dd12148c973ef97e993d\n2026-08-27T19:42:23+09:00\nT42 confirmatory replication rules (P5R-B SS4-A2): interaction class on the frozen gen-3 construction (3f71b02), new host seeds 5/8/13, targets rotate by index mod 3, calibration thresholds reused from the original pooled 21-run pool (exchangeability disclosed, per-seed calibration priced not run), readout = Wilson counts + gen-3 stratified/pooled + exact McNemar + exact binomial null check, confirmatory label gates no verdict\n\nZero-artifact attestation: at commit time no run directory with host seed 5, 8, or 13 exists under results/T4_leakage/runs/ (verified: glob count 0); no confirmatory count, interval, or test exists anywhere in the repository.\n\nCo-Authored-By: Claude Fable 5 <noreply@anthropic.com>",
+  "9114ab556354b428b503045b795de5498fcda5fb\n2026-08-27T19:33:21+09:00\nT51 addenda (P5R-B): 15-seed expansion adopted -- ten additional Fibonacci seeds fixed pre-training (13..987), all clauses unchanged, floor refines to 2/32768; redundancy sensitivity pre-written as the fifth cluster-robust family (per-tau seed-block units)\n\nCo-Authored-By: Claude Fable 5 <noreply@anthropic.com>",
+  "b321d27183f31784d301b76ed4f8ef09339986ef\n2026-08-27T19:17:08+09:00\nT5.1 corrigendum pre-computation: M1 test statistic = mean of seed-level medians (pooled median is non-monotone and tie-prone under block flips, making the disclosed floor unattainable); pooled median stays as the effect size; caught by selftest before any real computation\n\nCo-Authored-By: Claude Fable 5 <noreply@anthropic.com>",
+  "fbd857859df8cea58e9248268a838150f54241f3\n2026-08-27T19:13:56+09:00\nT5.1 cluster-robust statistics rules (P5R SS1, review SS4.3): units and crossed clustering named; feasibility pair fixed = exact seed-block sign-flip (32-flip enumeration, granularity floor 2/32=0.0625 disclosed IN ADVANCE as a design property) + hierarchical bootstrap CI (seed then target, 10k, seed 20260828); four families and their Holm scopes fixed; branch selection mechanical per the instrument's pre-written S/N wording\n\nZero-artifact attestation (2026-08-27 19:13:56 JST):\nresults/T5_stats exists: NO\ngrep -rl 'sign_flip\\|sign-flip\\|hierarchical bootstrap' results/ 2>/dev/null | head -1 || true \u2014 no cluster-robust statistic of any family exists anywhere under results/.\n\nCo-Authored-By: Claude Fable 5 <noreply@anthropic.com>",
+  "a9c87f9ff39eb53a177d388e0cd184f810b3cdc1\n2026-08-27T09:42:56+09:00\nT4.4 rules corrigendum pre-run: masks follow the grid house convention (one fixed verified MAR@30 mask per dataset, restricted to feature columns; seeds vary split/model randomness only) -- caught before any artifact\n\nCo-Authored-By: Claude Fable 5 <noreply@anthropic.com>",
+  "3025038f630a9c372e44b3c2d4a83cc02ed62df6\n2026-08-27T09:42:03+09:00\nT4.4 + T4.5 rules operationalized pre-run (P4O SS2.1, T4.3 pattern): within-fold downstream protocol fixed (folds, masks, nine-imputer refusal, uniform LR+XGB, macro metrics, leak-evidence smoke, Panel A task substitution held for sign-off, registry-bound R0 comparisons); statistics scheme fixed (Friedman + Holm-within-family posthoc + rank-biserial + seeded bootstrap CI + noise-anchored TOST margin 0.5x median seed-SD, post-data timing disclosed prominently)\n\nZero-artifact attestation (2026-08-27 09:42:03 JST):\nresults/T4_downstream exists: NO\nresults/T4_stats exists: NO\nNo Friedman/posthoc/TOST/CI inferential artifact of the grid exists anywhere under results/ (T4.5 is their first computation; its post-data timing is disclosed inside the rule doc itself).\n\nCo-Authored-By: Claude Fable 5 <noreply@anthropic.com>",
+  "e171f170d68fad484b406f237815b917610bff51\n2026-08-25T00:23:19+09:00\nT4.2 launch gate addendum #2: condition = envelope itself (launch at 12-alive>=9, workers=min(12-alive,10)); verdict clauses and all guardrails untouched; committed before launch per procedure\n\nCo-Authored-By: Claude Fable 5 <noreply@anthropic.com>",
+  "fcc8f8543e236747acc626152fb07b6151d2f03c\n2026-08-24T00:25:10+09:00\nT4.2 runner/analyzer with known-answer selftest (18 assertions incl non-degeneracy guard for interaction proxies); addendum unit erratum: pre-registered scale = 124 retrains ~ 159 machine-hours ~ 16-17 h wall @10 workers\n\nSelftest caught the checker itself twice pre-commit: (1) a t-correlated interaction partner keeps marginal independence by parity (E[z_t^2 sign(z_q)] odd in z_q) but degenerates the proxy to |z_q| -- guarded by corr(p,|z_q|)<0.2, not by the marginal check; (2) the plan gate compared machine-hours to a wall-clock figure -- unlike calibers, fixed and erratum'd in the rule file.\n\nCo-Authored-By: Claude Fable 5 <noreply@anthropic.com>",
+  "a69eea8b32455eb65a0d66f4f95d2f4640fc3374\n2026-08-24T00:16:27+09:00\nT4.2 launch gate amended to '>=10 CPU shards exited' (scheduling-only gate, zero grid-product dependency verified); all verdict clauses untouched; guardrails and approval chain recorded (P4K SS1)\n\nCo-Authored-By: Claude Fable 5 <noreply@anthropic.com>",
+  "0be7e25fe3f731646c9bdd45f5876ae891e0a084\n2026-08-24T00:15:49+09:00\nT4.3 interpretation supplement: mechanism-attribution output (MECH-PRIOR/OPTIMIZED/MIXED) mapped before any NoPrior readout; O1-O4 observables with recompute-asserted calibers; O4 reading bands fixed non-gating; eICU-only scope reasons recorded; parent rule 6535787 untouched (P4K SS2)\n\nZero-NoPrior-artifact attestation at commit time (2026-08-24 00:15:49 JST):\n$ ls -la results/T4_noprior/\n-rw-rw-r--  1 dengou dengou    0 Aug 23 23:55 t43_faith_train.log\n-rw-rw-r--  1 dengou dengou    0 Aug 23 23:55 t43_synth.log\n$ ls results/T3_faithfulness/ | grep -c NP_   -> 0\n$ stat -c '%y %n' results/T3_faithfulness/faithfulness_summary.json\n2026-08-21 05:44:17.012408730 +0900 results/T3_faithfulness/faithfulness_summary.json\nTraining PIDs 386387/386388 launched 23:55 under the parent rule; --stage analyze never invoked for the NoPrior variant.\n\nCo-Authored-By: Claude Fable 5 <noreply@anthropic.com>",
+  "653578718a054b774883d7a000a9858bb48200bd\n2026-08-22T04:08:18+09:00\nT4.3 and T4.2 verdict rules pre-registered at zero data (three-tier NoPrior rule resolving ambiguity toward narrowing; leakage FPR=0.05 calibration, per-class reporting, interaction stop threshold 3/6-vs-<=1)\n\nCommitted during the quiet overnight window so both rules precede any run,\nper the discipline the handover binds across Chat sessions.\n\nCo-Authored-By: Claude Fable 5 <noreply@anthropic.com>",
+  "0cf4662e61201ed027475cbfd80d5f7cac275319\n2026-08-21T20:10:54+09:00\nT4F score verdict rule: operationalize section-4.5's ~= before any comparison exists\n\nPrimary: AUROC, 15 pairs, retrained-host pair (bitwise same host); win\nrequires median>0 AND Wilcoxon p<0.05 AND direction in >=2/3 regimes; else\nindistinguishable. Wording consequences fixed for both outcomes, including\n'narrowing is not retreat'. State at commit: t4f_sixway_cells.csv absent,\n12/15 matrix pairs on disk unscored, zero comparison numbers computed.\n\nCo-Authored-By: Claude Fable 5 <noreply@anthropic.com>",
+  "f224cd273badd45145af10bd77ba3031b357876d\n2026-08-21T14:19:14+09:00\nT4F: presentation rule for permutation-on-SNI, pre-registered before any of its numbers exist\n\nSix-object rows on recovery/stability/cost regardless of direction; excluded\nfrom faithfulness with the circularity reason printed (it doubles as the\naxis-truth definition); neutral label 'post-hoc readout of the same host';\nguards tightened to six-or-refuse. State at commit: no stored pilot models,\nno synthetic ablation matrix, no A-matrix stability computed.\n\nCo-Authored-By: Claude Fable 5 <noreply@anthropic.com>",
+  "00a79849ab0426ac6c7becca92a446a136c7c365\n2026-08-20T17:42:19+09:00\nT3.2-R1: redundancy robustness pre-check, pre-registered before any A matrix existed\n\nPermutation ablation under-credits correlated sources; P weights them high by\nconstruction, so the artifact tilts D-vs-P in D's favour. Pre-registered:\nR = {j: pooled |corr|>0.8 on the complete table, prior's own recipe}; all five\nmethods re-scored on sources outside R; both scopes reported regardless of\nwhich favours us. 'Advantage holds' operationalised as the conjunction\n(median excl-delta > 0) AND (>= 0.5 x full delta) AND (Wilcoxon p<0.05),\nboth applicable datasets. State at commit: A-files=0, summary=0, both\ntraining chains still on their first runs (verified by listing, contents unread).\n\nCo-Authored-By: Claude Fable 5 <noreply@anthropic.com>",
+  "6030500f0cc7123e5808b6b46c94591b6b09cff3\n2026-08-20T16:50:18+09:00\nT3.2: faithfulness decision rule, committed before the harness exists\n\nGround truth A[f,j] = inference-time permutation ablation on the run's own\ntrained CPFA; primary statistic Spearman(row, A-row); verdict rule with\nprecedence (unfaithful floor 0.30 -> D>P Wilcoxon both datasets -> else\nD~P), mixed case resolved against ourselves.\n\nCo-Authored-By: Claude Fable 5 <noreply@anthropic.com>",
+  "41c522df13e9b25c91ad84cfe16ba8190a591659\n2026-07-30T11:37:06+09:00\nT2.5: fix the pilot go/no-go rule before running it\n\nP2e sections 1.3 and 11 require this ahead of any result, because the pilot is\nthe step most exposed to expectation. Written against the positioning rather\nthan a metric, since the positioning is what a negative result would force us to\nrewrite.\n\nGO if SNI-D is within 0.02 AUROC of the best post-hoc comparator or the paired\nWilcoxon over 15 (regime, seed) cells is not significant. CONDITIONAL GO if it\nloses but costs <=50% and needs no downstream model -- the claim then shrinks to\na free, model-free first-order audit signal. NO-GO otherwise. Independent NO-GO\nif SNI-D's median cross-seed Spearman is below 0.5, since a tool an order of\nmagnitude less stable than its own published 0.951 is not the tool the paper\ndescribes.\n\nAxis A uses main-experiment hyperparameters, fixing B18: R0's synthetic run used\nepochs 50 / heads 4 / emb 32, so its \"Prior-Only wins\" result may be\nunder-training. Agreement with SHAP is explicitly not a target -- B13 measured\nrho = -0.357 there.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>",
+  "686702f0b293e47dedb003e8556083e8d909b188\n2026-07-29T13:13:32+09:00\nT2d.1: fix the decision rule before measuring\n\nP2d section 8 requires the rule to be committed ahead of any result, because\n\"should SNI stay on the GPU\" has already been answered wrongly once (P2c 4.1,\nwithdrawn as B81).\n\nThree conditions, all required: CPU cost <= 3x CUDA per dataset (not on the\nmean); per-cell cost at 12-way concurrency <= 1.5x solo, counting only batches\nwhere every job finished; CPU/GPU metric difference no larger than the same\nmetric's cross-seed spread, with an absolute 1e-3 fallback so a degenerate\ndenominator cannot make the condition unfalsifiable.\n\nThe CUDA side is reused from the P2c smoke arm, which ran exactly this\nconfiguration. The void SNI/AutoMPG timing is excluded.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
+ ]
+}
