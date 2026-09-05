@@ -1,0 +1,322 @@
+{
+ "note": "Frozen mask files are NOT distributed (they are table-shaped derivatives of restricted-access tables). Regenerate them with missingness.cli generate under configs/missingness.yaml (profile clinical_v1) and the seeds recorded in each mask's meta; verify identity against the checksums below.",
+ "missingness_config_sha256": "781b7220d7991a93a2df2cf1913332b2342ef7d986f1211772d2abb438d95568",
+ "n_files": 63,
+ "files": [
+  {
+   "path": "masks/clinical_v1_shuffled/AutoMPG/AutoMPG_MAR_10per_mask.npy",
+   "sha256": "f07a95585a752ec199ef7e2750a5ab68a06251825be4adff31e643088996ae2b",
+   "bytes": 3656
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/AutoMPG/AutoMPG_MAR_30per_mask.npy",
+   "sha256": "23e47977388da75e8a82375ec70ea4e04974662457e57741c90c674e3dd86885",
+   "bytes": 3656
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/AutoMPG/AutoMPG_MAR_50per_mask.npy",
+   "sha256": "fd33ab3bc3496a30c29d17148909370591d82fb29056d13eef64220bfdfd3d58",
+   "bytes": 3656
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/AutoMPG/AutoMPG_MCAR_10per_mask.npy",
+   "sha256": "b217fc50720797d771e4536dd5b69fecf79f0808408baf0243e1789179bc0494",
+   "bytes": 3656
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/AutoMPG/AutoMPG_MCAR_30per_mask.npy",
+   "sha256": "b5ce4046ecf149aad28f23a8aa4cc1b781c91afa8574dfedb031f8f29145a577",
+   "bytes": 3656
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/AutoMPG/AutoMPG_MCAR_50per_mask.npy",
+   "sha256": "c8aba0ceef01bfac8a58caba20ef321d809218ea517dd285f50def03593d359d",
+   "bytes": 3656
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/AutoMPG/AutoMPG_MNAR_10per_mask.npy",
+   "sha256": "e0eb1b4d875216f9e6ce8df2e4a61ec8c83ebd02542084b91c74d0e889bb4560",
+   "bytes": 3656
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/AutoMPG/AutoMPG_MNAR_30per_mask.npy",
+   "sha256": "ecf29277cc21b9363c814a05cff4f435eb124899d2f30ed5841c6369661c7002",
+   "bytes": 3656
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/AutoMPG/AutoMPG_MNAR_50per_mask.npy",
+   "sha256": "ac1213c26de85057d056e6b2d4fc54f21b22581600599482dea148ff11f61111",
+   "bytes": 3656
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/CDC2022/CDC2022_MAR_10per_mask.npy",
+   "sha256": "c46ecc2939d8d930f48220a745fdb21dd61b7fa1729eb607f5f398548c052703",
+   "bytes": 123128
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/CDC2022/CDC2022_MAR_30per_mask.npy",
+   "sha256": "688bb7df2319f52bf70a89fe5259b69ee08923ec4a9e2125b37c2f62477d9f30",
+   "bytes": 123128
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/CDC2022/CDC2022_MAR_50per_mask.npy",
+   "sha256": "f32a81f1146427e962282a6acdb7e6090492844a21701603af06af4714f7705d",
+   "bytes": 123128
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/CDC2022/CDC2022_MCAR_10per_mask.npy",
+   "sha256": "74e134e08a8cc6efc6df37d99836acf7646e0c696dd71c8a3e09228ed409c093",
+   "bytes": 123128
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/CDC2022/CDC2022_MCAR_30per_mask.npy",
+   "sha256": "46edff8e361d2d6eebf119ace07714e0fd6fe6d6354b34da9924cc70e2280b55",
+   "bytes": 123128
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/CDC2022/CDC2022_MCAR_50per_mask.npy",
+   "sha256": "776b5d168652c48f0710bba77e2bbe2fd4d0601bd3410292ee93c5f5acaaa258",
+   "bytes": 123128
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/CDC2022/CDC2022_MNAR_10per_mask.npy",
+   "sha256": "909279c266d6c65f0cff7a499c7c5e43961424b133adf10d97fd587be9b1c29a",
+   "bytes": 123128
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/CDC2022/CDC2022_MNAR_30per_mask.npy",
+   "sha256": "e6f0fce13c9738484e38347c2e183c63cb2af33b00c0ec6cb292f9c9e183c1fc",
+   "bytes": 123128
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/CDC2022/CDC2022_MNAR_50per_mask.npy",
+   "sha256": "c8211d353749da8c102df344c1c6b9a0645c02026e8b261fe6a5459034d98687",
+   "bytes": 123128
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/ComCri/ComCri_MAR_10per_mask.npy",
+   "sha256": "bb807647f1017261568e0057f19d98fd2cf748e0b02351aa44576ccac2c5ba51",
+   "bytes": 22062
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/ComCri/ComCri_MAR_30per_mask.npy",
+   "sha256": "c7ae939fa075ed2a4f1f2a0107e988e54b3f4fd26f3ef7fe9ca364a71563f86e",
+   "bytes": 22062
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/ComCri/ComCri_MAR_50per_mask.npy",
+   "sha256": "9bd408d93abe2493e968e2dd5068bef1786fee996e412100d3c2d49cc45c8de8",
+   "bytes": 22062
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/ComCri/ComCri_MCAR_10per_mask.npy",
+   "sha256": "3780c56c4111e59f1dcd8829c2ee910c35a6d010d1368f75a5ee205b4c16ec3a",
+   "bytes": 22062
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/ComCri/ComCri_MCAR_30per_mask.npy",
+   "sha256": "e65a211c31859273d6a640166160ff0ba4728aae6a814b3d01e53e65e298c55a",
+   "bytes": 22062
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/ComCri/ComCri_MCAR_50per_mask.npy",
+   "sha256": "66f71386a5ba9c8edc2683e53f45378a7499ba6da7f0c6934654434d5ec3b83e",
+   "bytes": 22062
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/ComCri/ComCri_MNAR_10per_mask.npy",
+   "sha256": "edfa2ae44005154419faf01fd8b31f5402c2fd1944b0f0fa7b303bc1d2191db0",
+   "bytes": 22062
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/ComCri/ComCri_MNAR_30per_mask.npy",
+   "sha256": "45614e29410e7168acdc07ac68dd72b649baf6a578e9a0cf7d120562eea0c7c2",
+   "bytes": 22062
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/ComCri/ComCri_MNAR_50per_mask.npy",
+   "sha256": "761d20d66ce2d08d6580048d34ec6014b0cd1de8861ab324da9eb5ea5c2eb1bd",
+   "bytes": 22062
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/Concrete/Concrete_MAR_10per_mask.npy",
+   "sha256": "21fc31ec5051bda7bad44577927c992532cbc2fcd37094d20bcb85333c88d95e",
+   "bytes": 10428
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/Concrete/Concrete_MAR_30per_mask.npy",
+   "sha256": "3090e5982310372f2a7506a232bf62be5d2b82ad8eb321c6861f77f3e996ab95",
+   "bytes": 10428
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/Concrete/Concrete_MAR_50per_mask.npy",
+   "sha256": "47b6b4fb8f252a150534209faeb02413cdd456b6fe623de23f3b6cd86b8d70bd",
+   "bytes": 10428
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/Concrete/Concrete_MCAR_10per_mask.npy",
+   "sha256": "beb4b064755a0d97b9441493284eb0eb1bc50719822a0486f73b24837a7ff2ba",
+   "bytes": 10428
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/Concrete/Concrete_MCAR_30per_mask.npy",
+   "sha256": "39d8a8f46f058a8ec10d6241eed34912122b302e8824ffd69f86adbdd4991d06",
+   "bytes": 10428
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/Concrete/Concrete_MCAR_50per_mask.npy",
+   "sha256": "8542d8cea68d1502feedc43b5fd4f053f31e5491583083fccd78af1b49b8acd0",
+   "bytes": 10428
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/Concrete/Concrete_MNAR_10per_mask.npy",
+   "sha256": "02f74ea33d9df0184b1859c1db208f91e5391d5168a504d733eaaaa0b5753a2d",
+   "bytes": 10428
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/Concrete/Concrete_MNAR_30per_mask.npy",
+   "sha256": "1042be7aa23b43dcd9c25e864a2d172db55f26929113297e797efa6dca186fb3",
+   "bytes": 10428
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/Concrete/Concrete_MNAR_50per_mask.npy",
+   "sha256": "87c4692ab07523b9a4f4fbba00f55542550d18fbee53b697bd06c997705f4377",
+   "bytes": 10428
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/MIMIC/MIMIC_MAR_10per_mask.npy",
+   "sha256": "8b16bda5d1dd898a8f411d8f2f76162218eaf881448d229d8f3abbc8bd173f5f",
+   "bytes": 51410
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/MIMIC/MIMIC_MAR_30per_mask.npy",
+   "sha256": "58dc3369cba9f6ecf23b45206e02c3f1f4d93cbbd1de1ba00c5bd4140fd24146",
+   "bytes": 51410
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/MIMIC/MIMIC_MAR_50per_mask.npy",
+   "sha256": "396f877ec3288e8ac35127128874cbeadf8dd304bb42739e6be7e6c611a13b5a",
+   "bytes": 51410
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/MIMIC/MIMIC_MCAR_10per_mask.npy",
+   "sha256": "d868c3f07e8378a31a966bafc7f32ba4c4e462faf591ee29ff784bc699e33bb4",
+   "bytes": 51410
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/MIMIC/MIMIC_MCAR_30per_mask.npy",
+   "sha256": "db70701f6891d61e42a9057234cadb8e9700a7c7f4566bc9468015baba0267ff",
+   "bytes": 51410
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/MIMIC/MIMIC_MCAR_50per_mask.npy",
+   "sha256": "52907dfb35b26dbe1715ea6ff9044bbbbe5c3d5e6999faacf2309064a171f921",
+   "bytes": 51410
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/MIMIC/MIMIC_MNAR_10per_mask.npy",
+   "sha256": "9b082981393412863f3f07ed27373022e297d50ef0231ab11d8f8483e11f1364",
+   "bytes": 51410
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/MIMIC/MIMIC_MNAR_30per_mask.npy",
+   "sha256": "b2a7d13abe0af6546352e489ddf96c9048f03431d99f10d4aa420681030bc30b",
+   "bytes": 51410
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/MIMIC/MIMIC_MNAR_50per_mask.npy",
+   "sha256": "bf74e33a7003d3141bcb1142aa890ceb06266e03185b300bff7ff5948d8fb4ef",
+   "bytes": 51410
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/NHANES/NHANES_MAR_10per_mask.npy",
+   "sha256": "e0ec70438815031ddd444e514fc146996aded617072381fefd1c7b8fd69332e6",
+   "bytes": 38242
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/NHANES/NHANES_MAR_30per_mask.npy",
+   "sha256": "1aa4c6f701a6c58847ab020feff6e988a2cea2ab85f1e47e2e8a1a1737b5a739",
+   "bytes": 38242
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/NHANES/NHANES_MAR_50per_mask.npy",
+   "sha256": "dda0a8c9ec024eae18e50cb64b43c35e0cbe4105d389a7ed110a3ebf9c5d2a85",
+   "bytes": 38242
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/NHANES/NHANES_MCAR_10per_mask.npy",
+   "sha256": "1693e1cb742c5bb54964146bc5d3bdc4cb54719c2af55f47597cef224c69c79e",
+   "bytes": 38242
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/NHANES/NHANES_MCAR_30per_mask.npy",
+   "sha256": "4f478096d3477ae1dce315dca6f051ec5bcbc15a27263ab0f013143df115c9fe",
+   "bytes": 38242
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/NHANES/NHANES_MCAR_50per_mask.npy",
+   "sha256": "c46783e43926158ed03427151b041c09cefe769029ac03edbd880580d80e1015",
+   "bytes": 38242
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/NHANES/NHANES_MNAR_10per_mask.npy",
+   "sha256": "4da7450eda779ecce0b61c28f56b1f881d3c8dc71593afffea3489f15723cb99",
+   "bytes": 38242
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/NHANES/NHANES_MNAR_30per_mask.npy",
+   "sha256": "7599a7cf7d9bcaa7acb4b38f08ca9d617963b7f7747dd5f08eadf55b931dc1cd",
+   "bytes": 38242
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/NHANES/NHANES_MNAR_50per_mask.npy",
+   "sha256": "9a417e67615808d1b3c260c71d005145fb6f565227c94d7e173e2d8dd7a9996e",
+   "bytes": 38242
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/eICU/eICU_MAR_10per_mask.npy",
+   "sha256": "1d8c712eb976ffcaaad9bbd87928fa84151e39df17e56e6777c96677dedab5e8",
+   "bytes": 25868
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/eICU/eICU_MAR_30per_mask.npy",
+   "sha256": "51416c508b36ff121ac0f46ca2f5710dad6c4d89a6a81bde8b8ae36e73e42c9c",
+   "bytes": 25868
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/eICU/eICU_MAR_50per_mask.npy",
+   "sha256": "9431af30bae7ffbba521df14124ad271294acebea9649a35ecd4bc831c7f6898",
+   "bytes": 25868
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/eICU/eICU_MCAR_10per_mask.npy",
+   "sha256": "d2b3c07d82a8cc1472d340de916588d075e24cfe541efe0797799d96464b3887",
+   "bytes": 25868
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/eICU/eICU_MCAR_30per_mask.npy",
+   "sha256": "f30181bfa3962d3815b8916762536faf632f3e5fa94f511b016736db56b1bacc",
+   "bytes": 25868
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/eICU/eICU_MCAR_50per_mask.npy",
+   "sha256": "978a1abc0ecefb38a9726b090a364e1147df0e2b5ce2b4ed147470aea52a4b37",
+   "bytes": 25868
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/eICU/eICU_MNAR_10per_mask.npy",
+   "sha256": "a1f4722a27aa08cf5259d1fef5de7c8e751f4e04ac390f29ba8eee1cc386a6e9",
+   "bytes": 25868
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/eICU/eICU_MNAR_30per_mask.npy",
+   "sha256": "e912c106ed03ee252f4dac00bfbe35ba42b9cd9c1e81823010dce72ac0e83dbf",
+   "bytes": 25868
+  },
+  {
+   "path": "masks/clinical_v1_shuffled/eICU/eICU_MNAR_50per_mask.npy",
+   "sha256": "848d1f9a5dfe7c19615e15a0d7221067f1928cd39b620c1e8a0f9ab22a574631",
+   "bytes": 25868
+  }
+ ]
+}

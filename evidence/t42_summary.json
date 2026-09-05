@@ -1,0 +1,856 @@
+{
+ "alpha": 0.05,
+ "counts": [
+  {
+   "object": "MissForest-importance",
+   "condition": "consequence",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "MissForest-importance",
+   "condition": "consequence",
+   "kind": "null",
+   "detected": 1,
+   "n": 6,
+   "wilson_lo": 0.0301,
+   "wilson_hi": 0.5635
+  },
+  {
+   "object": "MissForest-importance",
+   "condition": "decoy",
+   "kind": "inj",
+   "detected": 4,
+   "n": 6,
+   "wilson_lo": 0.3,
+   "wilson_hi": 0.9032
+  },
+  {
+   "object": "MissForest-importance",
+   "condition": "decoy",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "MissForest-importance",
+   "condition": "exact",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "MissForest-importance",
+   "condition": "exact",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "MissForest-importance",
+   "condition": "interaction",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "MissForest-importance",
+   "condition": "interaction",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "MissForest-importance",
+   "condition": "noisy60",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "MissForest-importance",
+   "condition": "noisy60",
+   "kind": "null",
+   "detected": 1,
+   "n": 6,
+   "wilson_lo": 0.0301,
+   "wilson_hi": 0.5635
+  },
+  {
+   "object": "MissForest-importance",
+   "condition": "noisy80",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "MissForest-importance",
+   "condition": "noisy80",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "MissForest-importance",
+   "condition": "noisy95",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "MissForest-importance",
+   "condition": "noisy95",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "P",
+   "condition": "consequence",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "P",
+   "condition": "consequence",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "P",
+   "condition": "decoy",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "P",
+   "condition": "decoy",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "P",
+   "condition": "exact",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "P",
+   "condition": "exact",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "P",
+   "condition": "interaction",
+   "kind": "inj",
+   "detected": 3,
+   "n": 6,
+   "wilson_lo": 0.1876,
+   "wilson_hi": 0.8124
+  },
+  {
+   "object": "P",
+   "condition": "interaction",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "P",
+   "condition": "noisy60",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "P",
+   "condition": "noisy60",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "P",
+   "condition": "noisy80",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "P",
+   "condition": "noisy80",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "P",
+   "condition": "noisy95",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "P",
+   "condition": "noisy95",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "Permutation-on-MissForest",
+   "condition": "consequence",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "Permutation-on-MissForest",
+   "condition": "consequence",
+   "kind": "null",
+   "detected": 1,
+   "n": 6,
+   "wilson_lo": 0.0301,
+   "wilson_hi": 0.5635
+  },
+  {
+   "object": "Permutation-on-MissForest",
+   "condition": "decoy",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "Permutation-on-MissForest",
+   "condition": "decoy",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "Permutation-on-MissForest",
+   "condition": "exact",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "Permutation-on-MissForest",
+   "condition": "exact",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "Permutation-on-MissForest",
+   "condition": "interaction",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "Permutation-on-MissForest",
+   "condition": "interaction",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "Permutation-on-MissForest",
+   "condition": "noisy60",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "Permutation-on-MissForest",
+   "condition": "noisy60",
+   "kind": "null",
+   "detected": 1,
+   "n": 6,
+   "wilson_lo": 0.0301,
+   "wilson_hi": 0.5635
+  },
+  {
+   "object": "Permutation-on-MissForest",
+   "condition": "noisy80",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "Permutation-on-MissForest",
+   "condition": "noisy80",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "Permutation-on-MissForest",
+   "condition": "noisy95",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "Permutation-on-MissForest",
+   "condition": "noisy95",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "Permutation-on-SNI",
+   "condition": "consequence",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "Permutation-on-SNI",
+   "condition": "consequence",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "Permutation-on-SNI",
+   "condition": "decoy",
+   "kind": "inj",
+   "detected": 1,
+   "n": 6,
+   "wilson_lo": 0.0301,
+   "wilson_hi": 0.5635
+  },
+  {
+   "object": "Permutation-on-SNI",
+   "condition": "decoy",
+   "kind": "null",
+   "detected": 1,
+   "n": 6,
+   "wilson_lo": 0.0301,
+   "wilson_hi": 0.5635
+  },
+  {
+   "object": "Permutation-on-SNI",
+   "condition": "exact",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "Permutation-on-SNI",
+   "condition": "exact",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "Permutation-on-SNI",
+   "condition": "interaction",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "Permutation-on-SNI",
+   "condition": "interaction",
+   "kind": "null",
+   "detected": 1,
+   "n": 6,
+   "wilson_lo": 0.0301,
+   "wilson_hi": 0.5635
+  },
+  {
+   "object": "Permutation-on-SNI",
+   "condition": "noisy60",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "Permutation-on-SNI",
+   "condition": "noisy60",
+   "kind": "null",
+   "detected": 1,
+   "n": 6,
+   "wilson_lo": 0.0301,
+   "wilson_hi": 0.5635
+  },
+  {
+   "object": "Permutation-on-SNI",
+   "condition": "noisy80",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "Permutation-on-SNI",
+   "condition": "noisy80",
+   "kind": "null",
+   "detected": 2,
+   "n": 6,
+   "wilson_lo": 0.0968,
+   "wilson_hi": 0.7
+  },
+  {
+   "object": "Permutation-on-SNI",
+   "condition": "noisy95",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "Permutation-on-SNI",
+   "condition": "noisy95",
+   "kind": "null",
+   "detected": 1,
+   "n": 6,
+   "wilson_lo": 0.0301,
+   "wilson_hi": 0.5635
+  },
+  {
+   "object": "SHAP-on-MissForest",
+   "condition": "consequence",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "SHAP-on-MissForest",
+   "condition": "consequence",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "SHAP-on-MissForest",
+   "condition": "decoy",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "SHAP-on-MissForest",
+   "condition": "decoy",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "SHAP-on-MissForest",
+   "condition": "exact",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "SHAP-on-MissForest",
+   "condition": "exact",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "SHAP-on-MissForest",
+   "condition": "interaction",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "SHAP-on-MissForest",
+   "condition": "interaction",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "SHAP-on-MissForest",
+   "condition": "noisy60",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "SHAP-on-MissForest",
+   "condition": "noisy60",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "SHAP-on-MissForest",
+   "condition": "noisy80",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "SHAP-on-MissForest",
+   "condition": "noisy80",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "SHAP-on-MissForest",
+   "condition": "noisy95",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "SHAP-on-MissForest",
+   "condition": "noisy95",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "SNI-D",
+   "condition": "consequence",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "SNI-D",
+   "condition": "consequence",
+   "kind": "null",
+   "detected": 1,
+   "n": 6,
+   "wilson_lo": 0.0301,
+   "wilson_hi": 0.5635
+  },
+  {
+   "object": "SNI-D",
+   "condition": "decoy",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "SNI-D",
+   "condition": "decoy",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "SNI-D",
+   "condition": "exact",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "SNI-D",
+   "condition": "exact",
+   "kind": "null",
+   "detected": 2,
+   "n": 6,
+   "wilson_lo": 0.0968,
+   "wilson_hi": 0.7
+  },
+  {
+   "object": "SNI-D",
+   "condition": "interaction",
+   "kind": "inj",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "SNI-D",
+   "condition": "interaction",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "SNI-D",
+   "condition": "noisy60",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "SNI-D",
+   "condition": "noisy60",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  },
+  {
+   "object": "SNI-D",
+   "condition": "noisy80",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "SNI-D",
+   "condition": "noisy80",
+   "kind": "null",
+   "detected": 1,
+   "n": 6,
+   "wilson_lo": 0.0301,
+   "wilson_hi": 0.5635
+  },
+  {
+   "object": "SNI-D",
+   "condition": "noisy95",
+   "kind": "inj",
+   "detected": 6,
+   "n": 6,
+   "wilson_lo": 0.6097,
+   "wilson_hi": 1.0
+  },
+  {
+   "object": "SNI-D",
+   "condition": "noisy95",
+   "kind": "null",
+   "detected": 0,
+   "n": 6,
+   "wilson_lo": 0.0,
+   "wilson_hi": 0.3903
+  }
+ ],
+ "stop_report_interaction_D_wins": false,
+ "interaction_counts": {
+  "SNI-D": 0,
+  "P": 3,
+  "MissForest-importance": 6,
+  "SHAP-on-MissForest": 6,
+  "Permutation-on-MissForest": 6,
+  "Permutation-on-SNI": 6
+ },
+ "interaction_by_generation": {
+  "gen2": {
+   "n_by_dataset": {
+    "MIMIC": 2,
+    "eICU": 1
+   },
+   "detected_by_object": {
+    "SNI-D": 0,
+    "P": 2,
+    "MissForest-importance": 3,
+    "SHAP-on-MissForest": 3,
+    "Permutation-on-MissForest": 3,
+    "Permutation-on-SNI": 3
+   }
+  },
+  "gen3": {
+   "n_by_dataset": {
+    "MIMIC": 1,
+    "eICU": 2
+   },
+   "detected_by_object": {
+    "SNI-D": 0,
+    "P": 1,
+    "MissForest-importance": 3,
+    "SHAP-on-MissForest": 3,
+    "Permutation-on-MissForest": 3,
+    "Permutation-on-SNI": 3
+   }
+  }
+ },
+ "decoy_false_positives": {
+  "SNI-D": 6,
+  "P": 6,
+  "MissForest-importance": 4,
+  "SHAP-on-MissForest": 6,
+  "Permutation-on-MissForest": 6,
+  "Permutation-on-SNI": 1
+ },
+ "null_detection_rate": {
+  "SNI-D": 0.0952,
+  "P": 0.0,
+  "MissForest-importance": 0.0476,
+  "SHAP-on-MissForest": 0.0,
+  "Permutation-on-MissForest": 0.0476,
+  "Permutation-on-SNI": 0.1429
+ },
+ "null_exact_binomial": {
+  "SNI-D": {
+   "detected": 4,
+   "n": 42,
+   "p_geq_k_exact_binomial": 0.156893
+  },
+  "P": {
+   "detected": 0,
+   "n": 42,
+   "p_geq_k_exact_binomial": 1.0
+  },
+  "MissForest-importance": {
+   "detected": 2,
+   "n": 42,
+   "p_geq_k_exact_binomial": 0.627636
+  },
+  "SHAP-on-MissForest": {
+   "detected": 0,
+   "n": 42,
+   "p_geq_k_exact_binomial": 1.0
+  },
+  "Permutation-on-MissForest": {
+   "detected": 2,
+   "n": 42,
+   "p_geq_k_exact_binomial": 0.627636
+  },
+  "Permutation-on-SNI": {
+   "detected": 6,
+   "n": 42,
+   "p_geq_k_exact_binomial": 0.017432
+  }
+ },
+ "probe_interaction_chance_bound": {
+  "object": "Permutation-on-SNI",
+  "fpr_implemented": 0.142857,
+  "fpr_counts": "6/42",
+  "interaction_detected": 6,
+  "interaction_n": 6,
+  "p_all_detected_at_implemented_fpr": 8.499859752314083e-06
+ }
+}

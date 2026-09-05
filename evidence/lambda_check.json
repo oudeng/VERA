@@ -1,0 +1,18 @@
+{
+ "n_models_scanned": 960,
+ "withprior_lambda_quantiles": {
+  "min": 0.57139397,
+  "q25": 0.615256,
+  "median": 0.638474,
+  "q75": 0.649334,
+  "max": 0.66123092,
+  "n": 480
+ },
+ "n_host_archives": 60,
+ "global_max_lambda": 0.69314718,
+ "ln2": 0.69314718,
+ "margin_to_ln2": -0.0,
+ "argmax": "models_NP_MIMIC_seed13_cpu_t2.pt/mechanical_ventilation",
+ "n_violations": 0,
+ "verdict": "INVARIANT HOLDS"
+}
